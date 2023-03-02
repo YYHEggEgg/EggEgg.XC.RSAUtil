@@ -30,7 +30,7 @@ namespace XC.RSAUtil
         /// <returns></returns>
         public byte[] RsaEncrypt(byte[] data, RSAEncryptionPadding padding)
         {
-            if (PublicRsa == null) throw new ArgumentException("public key can not null");
+            AssertPubKeyNotNull();
             int bufferSize = (PublicRsa.KeySize / 8) - 11;//单块最大长度
             var buffer = new byte[bufferSize];
             using (MemoryStream inputStream = new MemoryStream(data), outputStream = new MemoryStream())
@@ -56,7 +56,7 @@ namespace XC.RSAUtil
         /// <returns></returns>
         public byte[] RsaDecrypt(byte[] data, RSAEncryptionPadding padding)
         {
-            if (PrivateRsa == null) throw new ArgumentException("private key can not null");
+            AssertPriKeyNotNull();
             int bufferSize = PrivateRsa.KeySize / 8;
             var buffer = new byte[bufferSize];
             using (MemoryStream inputStream = new MemoryStream(data), outputStream = new MemoryStream())
@@ -82,10 +82,7 @@ namespace XC.RSAUtil
         /// <returns></returns>
         public byte[] SignData(byte[] data, HashAlgorithmName hashAlgorithmName, RSASignaturePadding padding)
         {
-            if (PrivateRsa == null)
-            {
-                throw new ArgumentException("private key can not null");
-            }
+            AssertPriKeyNotNull();
             return PrivateRsa.SignData(data, hashAlgorithmName, padding);
         }
 
@@ -99,10 +96,7 @@ namespace XC.RSAUtil
         /// <returns></returns>
         public bool VerifyData(byte[] data, byte[] sign, HashAlgorithmName hashAlgorithmName, RSASignaturePadding padding)
         {
-            if (PublicRsa == null)
-            {
-                throw new ArgumentException("public key can not null");
-            }
+            AssertPubKeyNotNull();
             var res = PublicRsa.VerifyData(data, sign, hashAlgorithmName, padding);
             return res;
         }
@@ -114,6 +108,22 @@ namespace XC.RSAUtil
         {
             PrivateRsa?.Dispose();
             PublicRsa?.Dispose();
+        }
+
+        protected void AssertPubKeyNotNull()
+        {
+            if (PublicRsa == null)
+            {
+                throw new InvalidOperationException("public key can not be null");
+            }
+        }
+
+        protected void AssertPriKeyNotNull()
+        {
+            if (PrivateRsa == null)
+            {
+                throw new InvalidOperationException("private key can not be null");
+            }
         }
     }
 }

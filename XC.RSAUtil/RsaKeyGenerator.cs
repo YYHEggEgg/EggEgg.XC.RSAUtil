@@ -16,7 +16,7 @@ namespace XC.RSAUtil
     public class RsaKeyGenerator
     {
         /// <summary>
-        /// Generate XML Format RSA Key. Result: Index 0 is the private key and index 1 is the public key
+        /// Generate XML Format RSA Key.
         /// </summary>
         /// <param name="keySize">Key Size.Unit: bits</param>
         /// <returns></returns>
@@ -25,7 +25,7 @@ namespace XC.RSAUtil
             RSA rsa = RSA.Create();
             rsa.KeySize = keySize;
             var rsap = rsa.ExportParameters(true);
-            KeyResult res = new();
+            KeyResult res = new KeyResult();
 
             XElement privatElement = new XElement("RSAKeyValue");
             //Modulus
@@ -74,14 +74,14 @@ namespace XC.RSAUtil
         }
 
         /// <summary>
-        /// Generate RSA key in Pkcs1 format. Result: Index 0 is the private key and index 1 is the public key
+        /// Generate RSA key in Pkcs1 format.
         /// </summary>
         /// <param name="keySize">Key Size.Unit: bits</param>
         /// <param name="format">Whether the return is standard pem file format. If false, the method will return the PEM base64 string.</param>
         /// <returns></returns>
         public static KeyResult Pkcs1Key(int keySize, bool format = true)
         {
-            KeyResult res = new();
+            KeyResult res = new KeyResult();
 
             IAsymmetricCipherKeyPairGenerator kpGen = GeneratorUtilities.GetKeyPairGenerator("RSA");
             kpGen.Init(new KeyGenerationParameters(new SecureRandom(), keySize));
@@ -116,14 +116,14 @@ namespace XC.RSAUtil
         }
 
         /// <summary>
-        /// Generate Pkcs8 format RSA key. Result: Index 0 is the private key and index 1 is the public key
+        /// Generate Pkcs8 format RSA key.
         /// </summary>
         /// <param name="keySize">Key Size.Unit: bits</param>
         /// <param name="format">Whether the return is standard pem file format. If false, the method will return the PEM base64 string.</param>
         /// <returns></returns>
         public static KeyResult Pkcs8Key(int keySize, bool format = true)
         {
-            KeyResult res = new();
+            KeyResult res = new KeyResult();
 
             IAsymmetricCipherKeyPairGenerator kpGen = GeneratorUtilities.GetKeyPairGenerator("RSA");
             kpGen.Init(new KeyGenerationParameters(new SecureRandom(), keySize));
