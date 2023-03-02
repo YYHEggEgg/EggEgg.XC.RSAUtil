@@ -19,26 +19,26 @@ Install-Package XC.RSAUtil
 
 格式：XML
 
-```CSHARP
-var keyList = RsaKeyGenerator.XmlKey（2048）;
-var privateKey = keyList [0];
-var publicKey = keyList [1];
+```csharp
+var keys = RsaKeyGenerator.XmlKey(2048);
+var privateKey = keys.privateKey;
+var publicKey = key.publicKey;
 ```
 
 格式：Pkcs1
 
-```CSHARP
-var keyList = RsaKeyGenerator.Pkcs1Key（2048）;
-var privateKey = keyList [0];
-var publicKey = keyList [1];
+```csharp
+var keys = RsaKeyGenerator.Pkcs1Key(2048);
+var privateKey = keys.privateKey;
+var publicKey = key.publicKey;
 ```
 
 格式：Pkcs8
 
-```CSHARP
-var keyList = RsaKeyGenerator.Pkcs8Key（2048）;
-var privateKey = keyList [0];
-var publicKey = keyList [1];
+```csharp
+var keys = RsaKeyGenerator.Pkcs8Key(2048);
+var privateKey = keys.privateKey;
+var publicKey = key.publicKey;
 ```
 
 ### RSA密钥转换
@@ -47,51 +47,51 @@ var publicKey = keyList [1];
 
 ##### XML-> Pkcs1：
 
-- 私钥：`RsaKeyConvert.PrivateKeyXmlToPkcs1（）`
-- 公钥：`RsaKeyConvert.PublicKeyXmlToPem（）`
+- 私钥：`RsaKeyConvert.PrivateKeyXmlToPkcs1()`
+- 公钥：`RsaKeyConvert.PublicKeyXmlToPem()`
 
 ##### XML-> Pkcs8：
 
-- 私钥：`RsaKeyConvert.PrivateKeyXmlToPkcs8（）`
-- 公钥：`RsaKeyConvert.PublicKeyXmlToPem（）`
+- 私钥：`RsaKeyConvert.PrivateKeyXmlToPkcs8()`
+- 公钥：`RsaKeyConvert.PublicKeyXmlToPem()`
 
 ##### Pkcs1-> XML：
 
-- 私钥：`RsaKeyConvert.PrivateKeyPkcs1ToXml（）`
-- 公钥：`RsaKeyConvert.PublicKeyPemToXml（）`
+- 私钥：`RsaKeyConvert.PrivateKeyPkcs1ToXml()`
+- 公钥：`RsaKeyConvert.PublicKeyPemToXml()`
 
 ##### Pkcs1-> Pkcs8：
 
-- 私钥：`RsaKeyConvert.PrivateKeyPkcs1ToPkcs8（）`
+- 私钥：`RsaKeyConvert.PrivateKeyPkcs1ToPkcs8()`
 - 公钥：不需要转换
 
 ##### Pkcs8-> XML：
 
-- 私钥：`RsaKeyConvert.PrivateKeyPkcs8ToXml（）`
-- 公钥：`RsaKeyConvert.PublicKeyPemToXml（）`
+- 私钥：`RsaKeyConvert.PrivateKeyPkcs8ToXml()`
+- 公钥：`RsaKeyConvert.PublicKeyPemToXml()`
 
 ##### Pkcs8-> Pkcs1：
 
-- 私钥：`RsaKeyConvert.PrivateKeyPkcs8ToPkcs1（）`
+- 私钥：`RsaKeyConvert.PrivateKeyPkcs8ToPkcs1()`
 - 公钥：不需要转换
 
 ### 加密，解密，签名和验证签名
 
 > XML，Pkcs1，Pkcs8分别对应类：`RsaXmlUtil`，`RsaPkcs1Util`，`RsaPkcs8Util`。它们继承自抽象类`RSAUtilBase`
 
-- 加密：RSAUtilBase.Encrypt（）
-- 解密：`RSAUtilBase.Decrypt（）`
-- Sign：`RSAUtilBase.SignData（）`
-- 验证：`RSAUtilBase.VerifyData（）`
+- 加密：RSAUtilBase.RsaEncrypt()
+- 解密：`RSAUtilBase.RsaDecrypt()`
+- Sign：`RSAUtilBase.SignData()`
+- 验证：`RSAUtilBase.VerifyData()`
 
 ### PEM格式化
 
 >使用类“RsaPemFormatHelper”。
 
-- 格式化Pkcs1格式私钥：`RsaPemFormatHelper.Pkcs1PrivateKeyFormat（）`
-- 删除Pkcs1格式私钥格式：`RsaPemFormatHelper.Pkcs1PrivateKeyFormatRemove（）`
-- 格式化Pkcs8格式私钥：`RsaPemFormatHelper.Pkcs8PrivateKeyFormat（）`
-- 删除Pkcs8格式的私钥格式：`RsaPemFormatHelper.Pkcs8PrivateKeyFormatRemove（）`
+- 格式化Pkcs1格式私钥：`RsaPemFormatHelper.Pkcs1PrivateKeyFormat()`
+- 删除Pkcs1格式私钥格式：`RsaPemFormatHelper.Pkcs1PrivateKeyFormatRemove()`
+- 格式化Pkcs8格式私钥：`RsaPemFormatHelper.Pkcs8PrivateKeyFormat()`
+- 删除Pkcs8格式的私钥格式：`RsaPemFormatHelper.Pkcs8PrivateKeyFormatRemove()`
 
 ## 使用的开源组件
 

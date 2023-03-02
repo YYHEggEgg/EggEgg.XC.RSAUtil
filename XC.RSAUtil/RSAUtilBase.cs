@@ -82,19 +82,6 @@ namespace XC.RSAUtil
         /// <returns></returns>
         public byte[] SignData(byte[] data, HashAlgorithmName hashAlgorithmName, RSASignaturePadding padding)
         {
-            var res = SignDataGetBytes(data, hashAlgorithmName, padding);
-            return res;
-        }
-
-        /// <summary>
-        /// Use private key for data signing
-        /// </summary>
-        /// <param name="data">Need to sign data</param>
-        /// <param name="hashAlgorithmName">Signed hash algorithm name</param>
-        /// <param name="padding">Signature padding algorithm</param>
-        /// <returns>Sign bytes</returns>
-        public byte[] SignDataGetBytes(byte[] data, HashAlgorithmName hashAlgorithmName, RSASignaturePadding padding)
-        {
             if (PrivateRsa == null)
             {
                 throw new ArgumentException("private key can not null");

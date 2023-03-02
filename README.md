@@ -25,25 +25,25 @@ Install-Package XC.RSAUtil
 Format: XML
 
 ```csharp
-var keyList = RsaKeyGenerator.XmlKey(2048);
-var privateKey = keyList[0];
-var publicKey = keyList[1];
+var keys = RsaKeyGenerator.XmlKey(2048);
+var privateKey = keys.privateKey;
+var publicKey = key.publicKey;
 ```
 
 Format: Pkcs1
 
 ```csharp
-var keyList = RsaKeyGenerator.Pkcs1Key(2048);
-var privateKey = keyList[0];
-var publicKey = keyList[1];
+var keys = RsaKeyGenerator.Pkcs1Key(2048);
+var privateKey = keys.privateKey;
+var publicKey = key.publicKey;
 ```
 
 Format: Pkcs8
 
 ```csharp
-var keyList = RsaKeyGenerator.Pkcs8Key(2048);
-var privateKey = keyList[0];
-var publicKey = keyList[1];
+var keys = RsaKeyGenerator.Pkcs8Key(2048);
+var privateKey = keys.privateKey;
+var publicKey = key.publicKey;
 ```
 
 ### RSA key conversion
@@ -84,8 +84,8 @@ var publicKey = keyList[1];
 
 >XML, Pkcs1, Pkcs8 respectively corresponding categories: `RsaXmlUtil`, `RsaPkcs1Util`, `RsaPkcs8Util`.They inherit from the abstract class `RSAUtilBase`
 
-- Encrypt: `RSAUtilBase.Encrypt()`
-- Decrypt: `RSAUtilBase.Decrypt()`
+- Encrypt: `RSAUtilBase.RsaEncrypt()`
+- Decrypt: `RSAUtilBase.RsaDecrypt()`
 - Sign: `RSAUtilBase.SignData()`
 - Verify: `RSAUtilBase.VerifyData()`
 

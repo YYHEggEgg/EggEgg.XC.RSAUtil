@@ -27,7 +27,7 @@ namespace XC.RSAUtil.Test
             Console.WriteLine("Big Data Encrypt:");
             Console.WriteLine(str);
             Console.WriteLine("Big Data Decrypt:");
-            Console.WriteLine(bigDataRsa.RsaDecrypt(Encoding.UTF8.GetBytes(data),  RSAEncryptionPadding.Pkcs1)));
+            Console.WriteLine(bigDataRsa.RsaDecrypt(Encoding.UTF8.GetBytes(data),  RSAEncryptionPadding.Pkcs1));
 
             Console.ReadKey();
         }
