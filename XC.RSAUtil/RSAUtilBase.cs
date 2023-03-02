@@ -57,7 +57,7 @@ namespace XC.RSAUtil
         public byte[] RsaDecrypt(byte[] data, RSAEncryptionPadding padding)
         {
             if (PrivateRsa == null) throw new ArgumentException("private key can not null");
-            iint bufferSize = PrivateRsa.KeySize / 8;
+            int bufferSize = PrivateRsa.KeySize / 8;
             var buffer = new byte[bufferSize];
             using (MemoryStream inputStream = new MemoryStream(data), outputStream = new MemoryStream())
             {

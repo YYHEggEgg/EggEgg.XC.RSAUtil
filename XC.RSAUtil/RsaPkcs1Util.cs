@@ -20,7 +20,7 @@ namespace XC.RSAUtil
         {
             if (string.IsNullOrEmpty(privateKey) && string.IsNullOrEmpty(publicKey))
             {
-                throw new Exception("Public and private keys must not be empty at the same time");
+                throw new ArgumentException("Public and private keys must not be empty at the same time");
             }
 
 
@@ -67,7 +67,7 @@ namespace XC.RSAUtil
             var obj = pr.ReadObject();
             if (!(obj is RsaKeyParameters rsaKey))
             {
-                throw new Exception("Public key format is incorrect");
+                throw new ArgumentException("Public key format is incorrect", "publicKey");
             }
             var rsap = new RSAParameters();
             rsap.Modulus = rsaKey.Modulus.ToByteArrayUnsigned();
@@ -87,7 +87,7 @@ namespace XC.RSAUtil
             PemReader pr = new PemReader(new StringReader(privateKey));
             if (!(pr.ReadObject() is AsymmetricCipherKeyPair asymmetricCipherKeyPair))
             {
-                throw new Exception("Private key format is incorrect");
+                throw new ArgumentException("Private key format is incorrect", privateKey);
             }
             RsaPrivateCrtKeyParameters rsaPrivateCrtKeyParameters =
                 (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(

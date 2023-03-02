@@ -102,7 +102,7 @@ namespace XC.RSAUtil
             }
             catch (Exception e)
             {
-                throw new Exception("Private key format is incorrect",e);
+                throw new ArgumentException("Private key format is incorrect", "privateKey", e);
             }
             
         }
@@ -128,7 +128,7 @@ namespace XC.RSAUtil
             }
             catch (Exception e)
             {
-                throw new Exception("Public key format is incorrect", e);
+                throw new ArgumentException("Public key format is incorrect", "publicKey", e);
             }
             return rsap;
         }

@@ -16,7 +16,7 @@ namespace XC.RSAUtil
         {
             if (string.IsNullOrEmpty(privateKey) && string.IsNullOrEmpty(publicKey))
             {
-                throw new Exception("Public and private keys must not be empty at the same time");
+                throw new ArgumentException("Public and private keys must not be empty at the same time");
             }
 
             if (!string.IsNullOrEmpty(privateKey))
