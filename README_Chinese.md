@@ -99,4 +99,4 @@ var publicKey = key.publicKey;
 
 ## 案例
 
-[dotnetrsa](https://github.com/stulzq/dotnetrsa) - DotnetRSA 是一个利用 .NET Core 2.1 开发的 .NET Global Tool，是可以想npm全局安装一样，安装在你的系统中，只需敲一行命令便可以快速生成RSA加密算法所需的秘钥，目前支持三种格式的秘钥，分别为：xml、pkcs1、pkcs8。它还支持三种格式秘钥的想换转换。 
+[dotnetrsa](https://github.com/stulzq/dotnetrsa) - DotnetRSA 是一个利用 .NET Core 2.1 开发的 .NET Global Tool，是可以像npm全局安装一样，安装在你的系统中，只需敲一行命令便可以快速生成RSA加密算法所需的秘钥，目前支持三种格式的秘钥，分别为：xml、pkcs1、pkcs8。它还支持三种格式秘钥的相互转换。 

@@ -1,4 +1,4 @@
-# RSAUtil  [中文文档](https://github.com/stulzq/RSAUtil/blob/master/README_Chinese.md "中文文档")
+# RSAUtil  [中文文档](https://github.com/YYHEggEgg/RSAUtil/blob/master/README_Chinese.md "中文文档")
 
 [![Build Status](https://ci2.xcmaster.com/job/RSAUtil/job/master/badge/icon)](https://ci2.xcmaster.com/job/RSAUtil/job/master/)
 
@@ -101,10 +101,10 @@ var publicKey = key.publicKey;
 
 - Remove the Pkcs8 format private key format: `RsaPemFormatHelper.Pkcs8PrivateKeyFormatRemove()`
 
-## Reference component
+## Depending component
 
  [bc-csharp](https://github.com/onovotny/bc-csharp "bc-csharp") - onovotny
 
-## Cases
+## Example(s)
 
-[dotnetrsa](https://github.com/stulzq/dotnetrsa) - DotnetRSA is a .NET Core Global Tool.Dotnet RSA Tool can help you generate xml pkcs1, pkcs8 three kinds of format keys, and supports three types of mutual conversion. 
+[dotnetrsa](https://github.com/stulzq/dotnetrsa) - DotnetRSA is a .NET Core Global Tool, which can help you generate three kinds of format keys: xml, pkcs1, pkcs8, and shift keys' format from one to another. 
