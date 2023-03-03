@@ -1,6 +1,4 @@
-﻿using System;
-using System.Security.Cryptography;
-using System.Text;
+﻿using System.Security.Cryptography;
 using System.Xml.Linq;
 
 namespace XC.RSAUtil
@@ -10,21 +8,20 @@ namespace XC.RSAUtil
     /// Author:Zhiqiang Li
     /// CreateDate:2018-1-5
     /// </summary>
-    public class RsaXmlUtil:RSAUtilBase
+    public class RsaXmlUtil : RSAUtilBase
     {
         /// <summary>
-        /// RSA encryption
-        /// SHA256 hash algorithm to use the key length of at least 2048
+        /// The class initializer.
         /// </summary>
-        /// <param name="dataEncoding">Data coding</param>
-        /// <param name="keySize">Key length in bits:</param>
-        /// <param name="privateKey">private Key</param>
-        /// <param name="publicKey">public Key</param>
-        public RsaXmlUtil(Encoding dataEncoding,string publicKey, string privateKey = null, int keySize = 2048)
+        /// <param name="publicKey">The public key can be infered from private key.</param>
+        /// <param name="privateKey">If not given, this instance won't support private key features.</param>
+        /// <param name="keySize">The key length in bits, e.g. 2048-bits key.</param>
+        /// <exception cref="ArgumentException">Neither <paramref name="publicKey"/> nor <paramref name="privateKey"/> has been given.</exception>
+        public RsaXmlUtil(string? privateKey = null, string? publicKey = null, int keySize = 2048)
         {
             if (string.IsNullOrEmpty(privateKey) && string.IsNullOrEmpty(publicKey))
             {
-               throw new ArgumentException("Public and private keys must not be empty at the same time");
+                throw new ArgumentException("Public and private keys must not be empty at the same time");
             }
             else
             {
@@ -32,7 +29,7 @@ namespace XC.RSAUtil
                 if (!string.IsNullOrEmpty(privateKey))
                 {
                     PrivateRsa = RSA.Create();
-	                PrivateRsa.KeySize = keySize;
+                    PrivateRsa.KeySize = keySize;
                     var priRsap = CreateRsapFromPrivateKey(privateKey);
                     PrivateRsa.ImportParameters(priRsap);
 
@@ -54,12 +51,9 @@ namespace XC.RSAUtil
                     PublicRsa = RSA.Create();
                     pubRsap = CreateRsapFromPublicKey(publicKey);
                     PublicRsa.KeySize = keySize;
-                    PublicRsa.ImportParameters(pubRsap );
+                    PublicRsa.ImportParameters(pubRsap);
                 }
             }
-            
-
-            DataEncoding = dataEncoding ?? Encoding.UTF8;
         }
 
         /// <summary>
@@ -69,67 +63,60 @@ namespace XC.RSAUtil
         /// <returns></returns>
         protected sealed override RSAParameters CreateRsapFromPrivateKey(string privateKey)
         {
-            var rsap=new RSAParameters();
-            try
-            {
-                XElement root = XElement.Parse(privateKey);
-                //Modulus
-                var modulus = root.Element("Modulus");
-                //Exponent
-                var exponent = root.Element("Exponent");
-                //P
-                var p = root.Element("P");
-                //Q
-                var q = root.Element("Q");
-                //DP
-                var dp = root.Element("DP");
-                //DQ
-                var dq = root.Element("DQ");
-                //InverseQ
-                var inverseQ = root.Element("InverseQ");
-                //D
-                var d = root.Element("D");
+            var rsap = new RSAParameters();
+            XElement root = XElement.Parse(privateKey);
+            //Modulus
+            var modulus = root.Element("Modulus");
+            //Exponent
+            var exponent = root.Element("Exponent");
+            //P
+            var p = root.Element("P");
+            //Q
+            var q = root.Element("Q");
+            //DP
+            var dp = root.Element("DP");
+            //DQ
+            var dq = root.Element("DQ");
+            //InverseQ
+            var inverseQ = root.Element("InverseQ");
+            //D
+            var d = root.Element("D");
 
-                rsap.Modulus = Convert.FromBase64String(modulus.Value);
-                rsap.Exponent = Convert.FromBase64String(exponent.Value);
-                rsap.P = Convert.FromBase64String(p.Value);
-                rsap.Q = Convert.FromBase64String(q.Value);
-                rsap.DP = Convert.FromBase64String(dp.Value);
-                rsap.DQ = Convert.FromBase64String(dq.Value);
-                rsap.InverseQ = Convert.FromBase64String(inverseQ.Value);
-                rsap.D = Convert.FromBase64String(d.Value);
-                return rsap;
-            }
-            catch (Exception e)
-            {
-                throw new ArgumentException("Private key format is incorrect", nameof(privateKey), e);
-            }
-            
+            if (modulus == null || exponent == null || p == null || q == null || dp == null || dq == null
+                || inverseQ == null || d == null)
+                throw new ArgumentException("Invalid private key!", nameof(privateKey));
+
+            rsap.Modulus = Convert.FromBase64String(modulus.Value);
+            rsap.Exponent = Convert.FromBase64String(exponent.Value);
+            rsap.P = Convert.FromBase64String(p.Value);
+            rsap.Q = Convert.FromBase64String(q.Value);
+            rsap.DP = Convert.FromBase64String(dp.Value);
+            rsap.DQ = Convert.FromBase64String(dq.Value);
+            rsap.InverseQ = Convert.FromBase64String(inverseQ.Value);
+            rsap.D = Convert.FromBase64String(d.Value);
+            return rsap;
+
         }
 
-		/// <summary>
-		/// Create an RSA parameter based on the xml format public key
-		/// </summary>
-		/// <param name="publicKey"></param>
-		/// <returns></returns>
-		protected sealed override RSAParameters CreateRsapFromPublicKey( string publicKey)
+        /// <summary>
+        /// Create an RSA parameter based on the xml format public key
+        /// </summary>
+        /// <param name="publicKey"></param>
+        /// <returns></returns>
+        protected sealed override RSAParameters CreateRsapFromPublicKey(string publicKey)
         {
             var rsap = new RSAParameters();
-            try
-            {
-                XElement root = XElement.Parse(publicKey);
-                //Modulus
-                var modulus = root.Element("Modulus");
-                //Exponent
-                var exponent = root.Element("Exponent");
+            XElement root = XElement.Parse(publicKey);
+            //Modulus
+            var modulus = root.Element("Modulus");
+            //Exponent
+            var exponent = root.Element("Exponent");
 
-                rsap.Modulus = Convert.FromBase64String(modulus.Value);
-                rsap.Exponent = Convert.FromBase64String(exponent.Value);
-            }
-            catch (Exception e)
-            {
-                throw new ArgumentException("Public key format is incorrect", nameof(publicKey), e);
-            }
+            if (modulus == null || exponent == null)
+                throw new ArgumentException("Invalid public key!", nameof(publicKey));
+
+            rsap.Modulus = Convert.FromBase64String(modulus.Value);
+            rsap.Exponent = Convert.FromBase64String(exponent.Value);
             return rsap;
         }
     }

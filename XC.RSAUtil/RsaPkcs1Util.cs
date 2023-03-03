@@ -16,13 +16,19 @@ namespace XC.RSAUtil
     /// </summary>
     public class RsaPkcs1Util : RSAUtilBase
     {
-        public RsaPkcs1Util(Encoding encoding, string publicKey, string? privateKey = null, int keySize = 2048)
+        /// <summary>
+        /// The class initializer.
+        /// </summary>
+        /// <param name="publicKey">The public key can be infered from private key.</param>
+        /// <param name="privateKey">If not given, this instance won't support private key features.</param>
+        /// <param name="keySize">The key length in bits, e.g. 2048-bits key.</param>
+        /// <exception cref="ArgumentException">Neither <paramref name="publicKey"/> nor <paramref name="privateKey"/> has been given.</exception>
+        public RsaPkcs1Util(string? privateKey = null, string? publicKey = null, int keySize = 2048)
         {
             if (string.IsNullOrEmpty(privateKey) && string.IsNullOrEmpty(publicKey))
             {
                 throw new ArgumentException("Public and private keys must not be empty at the same time");
             }
-
 
             if (!string.IsNullOrEmpty(privateKey))
             {
@@ -51,8 +57,6 @@ namespace XC.RSAUtil
                 PublicRsa.KeySize = keySize;
                 PublicRsa.ImportParameters(CreateRsapFromPublicKey(publicKey));
             }
-
-            DataEncoding = encoding ?? Encoding.UTF8;
         }
         /// <summary>
         /// Create an RSA parameter based on the xml format public key
@@ -65,13 +69,15 @@ namespace XC.RSAUtil
 
             PemReader pr = new(new StringReader(publicKey));
             var obj = pr.ReadObject();
-            if (!(obj is RsaKeyParameters rsaKey))
+            if (obj is not RsaKeyParameters rsaKey)
             {
                 throw new ArgumentException("Public key format is incorrect", nameof(publicKey));
             }
-            var rsap = new RSAParameters();
-            rsap.Modulus = rsaKey.Modulus.ToByteArrayUnsigned();
-            rsap.Exponent = rsaKey.Exponent.ToByteArrayUnsigned();
+            var rsap = new RSAParameters
+            {
+                Modulus = rsaKey.Modulus.ToByteArrayUnsigned(),
+                Exponent = rsaKey.Exponent.ToByteArrayUnsigned()
+            };
             return rsap;
         }
 
@@ -85,22 +91,24 @@ namespace XC.RSAUtil
             privateKey = RsaPemFormatHelper.Pkcs1PrivateKeyFormat(privateKey);
 
             PemReader pr = new(new StringReader(privateKey));
-            if (!(pr.ReadObject() is AsymmetricCipherKeyPair asymmetricCipherKeyPair))
+            if (pr.ReadObject() is not AsymmetricCipherKeyPair asymmetricCipherKeyPair)
             {
                 throw new ArgumentException("Private key format is incorrect", privateKey);
             }
             RsaPrivateCrtKeyParameters rsaPrivateCrtKeyParameters =
                 (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(
                     PrivateKeyInfoFactory.CreatePrivateKeyInfo(asymmetricCipherKeyPair.Private));
-            var rsap = new RSAParameters();
-            rsap.Modulus = rsaPrivateCrtKeyParameters.Modulus.ToByteArrayUnsigned();
-            rsap.Exponent = rsaPrivateCrtKeyParameters.PublicExponent.ToByteArrayUnsigned();
-            rsap.P = rsaPrivateCrtKeyParameters.P.ToByteArrayUnsigned();
-            rsap.Q = rsaPrivateCrtKeyParameters.Q.ToByteArrayUnsigned();
-            rsap.DP = rsaPrivateCrtKeyParameters.DP.ToByteArrayUnsigned();
-            rsap.DQ = rsaPrivateCrtKeyParameters.DQ.ToByteArrayUnsigned();
-            rsap.InverseQ = rsaPrivateCrtKeyParameters.QInv.ToByteArrayUnsigned();
-            rsap.D = rsaPrivateCrtKeyParameters.Exponent.ToByteArrayUnsigned();
+            var rsap = new RSAParameters
+            {
+                Modulus = rsaPrivateCrtKeyParameters.Modulus.ToByteArrayUnsigned(),
+                Exponent = rsaPrivateCrtKeyParameters.PublicExponent.ToByteArrayUnsigned(),
+                P = rsaPrivateCrtKeyParameters.P.ToByteArrayUnsigned(),
+                Q = rsaPrivateCrtKeyParameters.Q.ToByteArrayUnsigned(),
+                DP = rsaPrivateCrtKeyParameters.DP.ToByteArrayUnsigned(),
+                DQ = rsaPrivateCrtKeyParameters.DQ.ToByteArrayUnsigned(),
+                InverseQ = rsaPrivateCrtKeyParameters.QInv.ToByteArrayUnsigned(),
+                D = rsaPrivateCrtKeyParameters.Exponent.ToByteArrayUnsigned()
+            };
 
             return rsap;
         }

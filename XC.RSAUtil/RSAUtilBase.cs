@@ -9,9 +9,8 @@ namespace XC.RSAUtil
 {
     public abstract class RSAUtilBase : IDisposable
     {
-        public RSA PrivateRsa;
-        public RSA PublicRsa;
-        public Encoding DataEncoding;
+        public RSA? PrivateRsa;
+        public RSA? PublicRsa;
 
         static readonly Dictionary<RSAEncryptionPadding, int> PaddingLimitDic = new()
         {
@@ -31,7 +30,9 @@ namespace XC.RSAUtil
         public byte[] RsaEncrypt(byte[] data, RSAEncryptionPadding padding)
         {
             AssertPubKeyNotNull();
+#pragma warning disable CS8602 // Asserted.
             int bufferSize = (PublicRsa.KeySize / 8) - 11;//单块最大长度
+#pragma warning restore CS8602 // 解引用可能出现空引用。
             var buffer = new byte[bufferSize];
             using (MemoryStream inputStream = new(data), outputStream = new())
             {
@@ -57,7 +58,9 @@ namespace XC.RSAUtil
         public byte[] RsaDecrypt(byte[] data, RSAEncryptionPadding padding)
         {
             AssertPriKeyNotNull();
+#pragma warning disable CS8602 // Asserted.
             int bufferSize = PrivateRsa.KeySize / 8;
+#pragma warning restore CS8602 // 解引用可能出现空引用。
             var buffer = new byte[bufferSize];
             using (MemoryStream inputStream = new(data), outputStream = new())
             {
@@ -83,7 +86,9 @@ namespace XC.RSAUtil
         public byte[] SignData(byte[] data, HashAlgorithmName hashAlgorithmName, RSASignaturePadding padding)
         {
             AssertPriKeyNotNull();
+#pragma warning disable CS8602 // Asserted.
             return PrivateRsa.SignData(data, hashAlgorithmName, padding);
+#pragma warning restore CS8602 // 解引用可能出现空引用。
         }
 
         /// <summary>
@@ -97,7 +102,9 @@ namespace XC.RSAUtil
         public bool VerifyData(byte[] data, byte[] sign, HashAlgorithmName hashAlgorithmName, RSASignaturePadding padding)
         {
             AssertPubKeyNotNull();
+#pragma warning disable CS8602 // Asserted.
             var res = PublicRsa.VerifyData(data, sign, hashAlgorithmName, padding);
+#pragma warning restore CS8602 // 解引用可能出现空引用。
             return res;
         }
 

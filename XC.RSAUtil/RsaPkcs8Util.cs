@@ -12,7 +12,7 @@ namespace XC.RSAUtil
     /// </summary>
     public class RsaPkcs8Util:RSAUtilBase
     {
-        public RsaPkcs8Util(Encoding dataEncoding, string publicKey, string privateKey = null, int keySize = 2048)
+        public RsaPkcs8Util(string? privateKey = null, string? publicKey = null, int keySize = 2048)
         {
             if (string.IsNullOrEmpty(privateKey) && string.IsNullOrEmpty(publicKey))
             {
@@ -46,8 +46,6 @@ namespace XC.RSAUtil
                 var pubRsap = CreateRsapFromPublicKey(publicKey);
                 PublicRsa.ImportParameters(pubRsap);
             }
-
-            DataEncoding = dataEncoding ?? Encoding.UTF8;
         }
 
 		/// <summary>
@@ -59,9 +57,11 @@ namespace XC.RSAUtil
         {
             publicKey = RsaPemFormatHelper.PublicKeyFormatRemove(publicKey);
             RsaKeyParameters publicKeyParam = (RsaKeyParameters)PublicKeyFactory.CreateKey(Convert.FromBase64String(publicKey));
-            var rsap = new RSAParameters();
-            rsap.Modulus = publicKeyParam.Modulus.ToByteArrayUnsigned();
-            rsap.Exponent = publicKeyParam.Exponent.ToByteArrayUnsigned();
+            var rsap = new RSAParameters
+            {
+                Modulus = publicKeyParam.Modulus.ToByteArrayUnsigned(),
+                Exponent = publicKeyParam.Exponent.ToByteArrayUnsigned()
+            };
             return rsap;
         }
 
@@ -75,15 +75,17 @@ namespace XC.RSAUtil
             privateKey = RsaPemFormatHelper.Pkcs8PrivateKeyFormatRemove(privateKey);
             RsaPrivateCrtKeyParameters privateKeyParam = (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(Convert.FromBase64String(privateKey));
 
-            var rsap=new RSAParameters();
-            rsap.Modulus = privateKeyParam.Modulus.ToByteArrayUnsigned();
-            rsap.Exponent = privateKeyParam.PublicExponent.ToByteArrayUnsigned();
-            rsap.P = privateKeyParam.P.ToByteArrayUnsigned();
-            rsap.Q = privateKeyParam.Q.ToByteArrayUnsigned();
-            rsap.DP = privateKeyParam.DP.ToByteArrayUnsigned();
-            rsap.DQ = privateKeyParam.DQ.ToByteArrayUnsigned();
-            rsap.InverseQ = privateKeyParam.QInv.ToByteArrayUnsigned();
-            rsap.D = privateKeyParam.Exponent.ToByteArrayUnsigned();
+            var rsap = new RSAParameters
+            {
+                Modulus = privateKeyParam.Modulus.ToByteArrayUnsigned(),
+                Exponent = privateKeyParam.PublicExponent.ToByteArrayUnsigned(),
+                P = privateKeyParam.P.ToByteArrayUnsigned(),
+                Q = privateKeyParam.Q.ToByteArrayUnsigned(),
+                DP = privateKeyParam.DP.ToByteArrayUnsigned(),
+                DQ = privateKeyParam.DQ.ToByteArrayUnsigned(),
+                InverseQ = privateKeyParam.QInv.ToByteArrayUnsigned(),
+                D = privateKeyParam.Exponent.ToByteArrayUnsigned()
+            };
 
             return rsap;
         }

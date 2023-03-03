@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 using System.Xml.Linq;
 using Org.BouncyCastle.Crypto;
@@ -26,6 +28,9 @@ namespace XC.RSAUtil
             rsa.KeySize = keySize;
             var rsap = rsa.ExportParameters(true);
             KeyResult res = new();
+            if (rsap.Modulus == null || rsap.Exponent == null || rsap.P == null || rsap.Q == null 
+                || rsap.DP == null || rsap.DQ == null || rsap.InverseQ == null || rsap.D == null)
+                throw new Exception($"Generate key failed!");
 
             XElement privatElement = new("RSAKeyValue");
             //Modulus
