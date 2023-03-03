@@ -25,25 +25,25 @@ namespace XC.RSAUtil
             RSA rsa = RSA.Create();
             rsa.KeySize = keySize;
             var rsap = rsa.ExportParameters(true);
-            KeyResult res = new KeyResult();
+            KeyResult res = new();
 
-            XElement privatElement = new XElement("RSAKeyValue");
+            XElement privatElement = new("RSAKeyValue");
             //Modulus
-            XElement primodulus = new XElement("Modulus", Convert.ToBase64String(rsap.Modulus));
+            XElement primodulus = new("Modulus", Convert.ToBase64String(rsap.Modulus));
             //Exponent
-            XElement priexponent = new XElement("Exponent", Convert.ToBase64String(rsap.Exponent));
+            XElement priexponent = new("Exponent", Convert.ToBase64String(rsap.Exponent));
             //P
-            XElement prip = new XElement("P", Convert.ToBase64String(rsap.P));
+            XElement prip = new("P", Convert.ToBase64String(rsap.P));
             //Q
-            XElement priq = new XElement("Q", Convert.ToBase64String(rsap.Q));
+            XElement priq = new("Q", Convert.ToBase64String(rsap.Q));
             //DP
-            XElement pridp = new XElement("DP", Convert.ToBase64String(rsap.DP));
+            XElement pridp = new("DP", Convert.ToBase64String(rsap.DP));
             //DQ
-            XElement pridq = new XElement("DQ", Convert.ToBase64String(rsap.DQ));
+            XElement pridq = new("DQ", Convert.ToBase64String(rsap.DQ));
             //InverseQ
-            XElement priinverseQ = new XElement("InverseQ", Convert.ToBase64String(rsap.InverseQ));
+            XElement priinverseQ = new("InverseQ", Convert.ToBase64String(rsap.InverseQ));
             //D
-            XElement prid = new XElement("D", Convert.ToBase64String(rsap.D));
+            XElement prid = new("D", Convert.ToBase64String(rsap.D));
 
             privatElement.Add(primodulus);
             privatElement.Add(priexponent);
@@ -58,11 +58,11 @@ namespace XC.RSAUtil
             res.privateKey = privatElement.ToString();
 
 
-            XElement publicElement = new XElement("RSAKeyValue");
+            XElement publicElement = new("RSAKeyValue");
             //Modulus
-            XElement pubmodulus = new XElement("Modulus", Convert.ToBase64String(rsap.Modulus));
+            XElement pubmodulus = new("Modulus", Convert.ToBase64String(rsap.Modulus));
             //Exponent
-            XElement pubexponent = new XElement("Exponent", Convert.ToBase64String(rsap.Exponent));
+            XElement pubexponent = new("Exponent", Convert.ToBase64String(rsap.Exponent));
 
             publicElement.Add(pubmodulus);
             publicElement.Add(pubexponent);
@@ -81,14 +81,14 @@ namespace XC.RSAUtil
         /// <returns></returns>
         public static KeyResult Pkcs1Key(int keySize, bool format = true)
         {
-            KeyResult res = new KeyResult();
+            KeyResult res = new();
 
             IAsymmetricCipherKeyPairGenerator kpGen = GeneratorUtilities.GetKeyPairGenerator("RSA");
             kpGen.Init(new KeyGenerationParameters(new SecureRandom(), keySize));
             var keyPair = kpGen.GenerateKeyPair();
 
-            StringWriter sw = new StringWriter();
-            PemWriter pWrt = new PemWriter(sw);
+            StringWriter sw = new();
+            PemWriter pWrt = new(sw);
             pWrt.WriteObject(keyPair.Private);
             pWrt.Writer.Close();
             var privateKey = sw.ToString();
@@ -100,8 +100,8 @@ namespace XC.RSAUtil
 
             res.privateKey = privateKey;
 
-            StringWriter swpub = new StringWriter();
-            PemWriter pWrtpub = new PemWriter(swpub);
+            StringWriter swpub = new();
+            PemWriter pWrtpub = new(swpub);
             pWrtpub.WriteObject(keyPair.Public);
             pWrtpub.Writer.Close();
             string publicKey = swpub.ToString();
@@ -123,15 +123,15 @@ namespace XC.RSAUtil
         /// <returns></returns>
         public static KeyResult Pkcs8Key(int keySize, bool format = true)
         {
-            KeyResult res = new KeyResult();
+            KeyResult res = new();
 
             IAsymmetricCipherKeyPairGenerator kpGen = GeneratorUtilities.GetKeyPairGenerator("RSA");
             kpGen.Init(new KeyGenerationParameters(new SecureRandom(), keySize));
             var keyPair = kpGen.GenerateKeyPair();
 
-            StringWriter swpri = new StringWriter();
-            PemWriter pWrtpri = new PemWriter(swpri);
-            Pkcs8Generator pkcs8 = new Pkcs8Generator(keyPair.Private);
+            StringWriter swpri = new();
+            PemWriter pWrtpri = new(swpri);
+            Pkcs8Generator pkcs8 = new(keyPair.Private);
             pWrtpri.WriteObject(pkcs8);
             pWrtpri.Writer.Close();
             string privateKey = swpri.ToString();
@@ -143,8 +143,8 @@ namespace XC.RSAUtil
 
             res.privateKey = privateKey;
 
-            StringWriter swpub = new StringWriter();
-            PemWriter pWrtpub = new PemWriter(swpub);
+            StringWriter swpub = new();
+            PemWriter pWrtpub = new(swpub);
             pWrtpub.WriteObject(keyPair.Public);
             pWrtpub.Writer.Close();
             string publicKey = swpub.ToString();

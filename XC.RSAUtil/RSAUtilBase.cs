@@ -13,7 +13,7 @@ namespace XC.RSAUtil
         public RSA PublicRsa;
         public Encoding DataEncoding;
 
-        static readonly Dictionary<RSAEncryptionPadding, int> PaddingLimitDic = new Dictionary<RSAEncryptionPadding, int>()
+        static readonly Dictionary<RSAEncryptionPadding, int> PaddingLimitDic = new()
         {
             [RSAEncryptionPadding.Pkcs1] = 11,
             [RSAEncryptionPadding.OaepSHA1] = 42,
@@ -33,7 +33,7 @@ namespace XC.RSAUtil
             AssertPubKeyNotNull();
             int bufferSize = (PublicRsa.KeySize / 8) - 11;//单块最大长度
             var buffer = new byte[bufferSize];
-            using (MemoryStream inputStream = new MemoryStream(data), outputStream = new MemoryStream())
+            using (MemoryStream inputStream = new(data), outputStream = new())
             {
                 while (true)//分段加密
                 {
@@ -59,7 +59,7 @@ namespace XC.RSAUtil
             AssertPriKeyNotNull();
             int bufferSize = PrivateRsa.KeySize / 8;
             var buffer = new byte[bufferSize];
-            using (MemoryStream inputStream = new MemoryStream(data), outputStream = new MemoryStream())
+            using (MemoryStream inputStream = new(data), outputStream = new())
             {
                 while (true)
                 {
