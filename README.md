@@ -1,3 +1,7 @@
+# Notice
+
+This package is **not the official version of GitHub Repository [stulzq/RSAUtil](https://github.com/stulzq/RSAUtil)** but a custom modified version. Please go to [NuGet XC.RSAUtil](https://www.nuget.org/packages/XC.RSAUtil) for the official one.
+
 # RSAUtil  [中文文档](https://github.com/YYHEggEgg/RSAUtil/blob/master/README_Chinese.md "中文文档")
 
 [![Build Status](https://ci2.xcmaster.com/job/RSAUtil/job/master/badge/icon)](https://ci2.xcmaster.com/job/RSAUtil/job/master/)

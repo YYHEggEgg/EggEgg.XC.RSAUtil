@@ -4,14 +4,23 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>1.3.6</Version>
-    <Authors>stulzq</Authors>
-    <Company>stulzq</Company>
-    <Description>.NET Core RSA algorithm using the help tool.It supports data encryption, decryption, signature and verification signature.It supports three key formats, namely: xml, pkcs1, pkcs8.It also supports key conversion for these three formats.Last also support pem formatting.</Description>
+    <Version>1.3.6.0-beta</Version>
+    <GenerateDocumentationFile>False</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>EggEgg.XC.RSAUtil</Title>
+    <Authors>YYHEggEgg</Authors>
+    <Company>YYHEggEgg</Company>
+    <Description>(NOT OFFICIAL) .NET Core RSA algorithm using the help tool.It supports data encryption, decryption, signature and verification signature.It supports three key formats, namely: xml, pkcs1, pkcs8.It also supports key conversion for these three formats.Last also support pem formatting.</Description>
     <Copyright>CopyRight 2018-2019 stulzq</Copyright>
-    <PackageProjectUrl>https://github.com/stulzq/RSAUtil</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/YYHEggEgg/RSAUtil</PackageProjectUrl>
     <PackageTags>RSA,RSA Xml,RSA Pkcs1,RSA Pkcs8,RSA Convert,RSA Format,Pem,RSAUtil,RSAHelper</PackageTags>
-    <PackageReleaseNotes>Use the popular bouncycastle dependency</PackageReleaseNotes>
+    <PackageReleaseNotes>Notice: This package is not the official version of GitHub Repository stulzq/RSAUtil but a custom modified version. Please go to https://www.nuget.org/packages/XC.RSAUtil for the official one.</PackageReleaseNotes>
+    <IncludeSymbols>True</IncludeSymbols>
+    <PackageId>EggEgg.$(AssemblyName)</PackageId>
+    <Product>EggEgg.$(AssemblyName)</Product>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
