@@ -67,9 +67,9 @@ namespace XC.RSAUtil
         {
             publicKey = RsaPemFormatHelper.PublicKeyFormat(publicKey);
 
-            PemReader pr = new(new StringReader(publicKey));
+            PemReader pr = new PemReader(new StringReader(publicKey));
             var obj = pr.ReadObject();
-            if (obj is not RsaKeyParameters rsaKey)
+            if (!(obj is RsaKeyParameters rsaKey))
             {
                 throw new ArgumentException("Public key format is incorrect", nameof(publicKey));
             }
@@ -90,8 +90,8 @@ namespace XC.RSAUtil
         {
             privateKey = RsaPemFormatHelper.Pkcs1PrivateKeyFormat(privateKey);
 
-            PemReader pr = new(new StringReader(privateKey));
-            if (pr.ReadObject() is not AsymmetricCipherKeyPair asymmetricCipherKeyPair)
+            PemReader pr = new PemReader(new StringReader(privateKey));
+            if (!(pr.ReadObject() is AsymmetricCipherKeyPair asymmetricCipherKeyPair))
             {
                 throw new ArgumentException("Private key format is incorrect", privateKey);
             }

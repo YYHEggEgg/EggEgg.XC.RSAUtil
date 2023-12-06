@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
 using Org.BouncyCastle.Crypto;
@@ -24,8 +23,8 @@ namespace XC.RSAUtil
         {
             privateKey = RsaPemFormatHelper.Pkcs1PrivateKeyFormat(privateKey);
 
-            PemReader pr = new(new StringReader(privateKey));
-            if (pr.ReadObject() is not AsymmetricCipherKeyPair asymmetricCipherKeyPair)
+            PemReader pr = new PemReader(new StringReader(privateKey));
+            if (!(pr.ReadObject() is AsymmetricCipherKeyPair asymmetricCipherKeyPair))
             {
                 throw new ArgumentException("Private key format is incorrect", nameof(privateKey));
             }
@@ -33,11 +32,11 @@ namespace XC.RSAUtil
                 (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(
                     PrivateKeyInfoFactory.CreatePrivateKeyInfo(asymmetricCipherKeyPair.Private));
 
-            RsaKeyParameters rsaPublicKeyParameters = new(false,
+            RsaKeyParameters rsaPublicKeyParameters = new RsaKeyParameters(false,
                 rsaPrivateCrtKeyParameters.Modulus, rsaPrivateCrtKeyParameters.PublicExponent);
 
-            StringWriter sw = new();
-            PemWriter pWrt = new(sw);
+            StringWriter sw = new StringWriter();
+            PemWriter pWrt = new PemWriter(sw);
             pWrt.WriteObject(rsaPublicKeyParameters);
             pWrt.Writer.Close();
             return sw.ToString();
@@ -54,11 +53,11 @@ namespace XC.RSAUtil
             RsaPrivateCrtKeyParameters privateKeyParam =
                 (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(Convert.FromBase64String(privateKey));
 
-            RsaKeyParameters rsaPublicKeyParameters = new(false,
+            RsaKeyParameters rsaPublicKeyParameters = new RsaKeyParameters(false,
                 privateKeyParam.Modulus, privateKeyParam.PublicExponent);
 
-            StringWriter sw = new();
-            PemWriter pWrt = new(sw);
+            StringWriter sw = new StringWriter();
+            PemWriter pWrt = new PemWriter(sw);
             pWrt.WriteObject(rsaPublicKeyParameters);
             pWrt.Writer.Close();
             return sw.ToString();
@@ -93,12 +92,12 @@ namespace XC.RSAUtil
                 || inverseQ == null || d == null)
                 throw new ArgumentException("Invalid private key!", nameof(privateKey));
 
-            XElement publicElement = new("RSAKeyValue");
+            XElement publicElement = new XElement("RSAKeyValue");
             //Modulus
-            XElement pubmodulus = new("Modulus", Convert.ToBase64String(
+            XElement pubmodulus = new XElement("Modulus", Convert.ToBase64String(
                 new BigInteger(1, Convert.FromBase64String(modulus.Value)).ToByteArrayUnsigned()));
             //Exponent
-            XElement pubexponent = new("Exponent", Convert.ToBase64String(
+            XElement pubexponent = new XElement("Exponent", Convert.ToBase64String(
                 new BigInteger(1, Convert.FromBase64String(exponent.Value)).ToByteArrayUnsigned()));
 
             publicElement.Add(pubmodulus);

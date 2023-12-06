@@ -18,7 +18,7 @@ namespace XC.RSAUtil
                 return str;
             }
 
-            List<string> res = new();
+            List<string> res = new List<string>();
             res.Add("-----BEGIN RSA PRIVATE KEY-----");
 
             int pos = 0;
@@ -61,7 +61,7 @@ namespace XC.RSAUtil
             {
                 return str;
             }
-            List<string> res = new();
+            List<string> res = new List<string>();
             res.Add("-----BEGIN PRIVATE KEY-----");
 
             int pos = 0;
@@ -104,7 +104,7 @@ namespace XC.RSAUtil
             {
                 return str;
             }
-            List<string> res = new();
+            List<string> res = new List<string>();
             res.Add("-----BEGIN PUBLIC KEY-----");
             int pos = 0;
 

@@ -12,7 +12,7 @@ namespace XC.RSAUtil
         public RSA? PrivateRsa;
         public RSA? PublicRsa;
 
-        static readonly Dictionary<RSAEncryptionPadding, int> PaddingLimitDic = new()
+        static readonly Dictionary<RSAEncryptionPadding, int> PaddingLimitDic = new Dictionary<RSAEncryptionPadding, int>()
         {
             [RSAEncryptionPadding.Pkcs1] = 11,
             [RSAEncryptionPadding.OaepSHA1] = 42,
@@ -34,7 +34,7 @@ namespace XC.RSAUtil
             int bufferSize = (PublicRsa.KeySize / 8) - 11;//单块最大长度
 #pragma warning restore CS8602 // 解引用可能出现空引用。
             var buffer = new byte[bufferSize];
-            using (MemoryStream inputStream = new(data), outputStream = new())
+            using (MemoryStream inputStream = new MemoryStream(data), outputStream = new MemoryStream())
             {
                 while (true)//分段加密
                 {
@@ -62,7 +62,7 @@ namespace XC.RSAUtil
             int bufferSize = PrivateRsa.KeySize / 8;
 #pragma warning restore CS8602 // 解引用可能出现空引用。
             var buffer = new byte[bufferSize];
-            using (MemoryStream inputStream = new(data), outputStream = new())
+            using (MemoryStream inputStream = new MemoryStream(data), outputStream = new MemoryStream())
             {
                 while (true)
                 {
