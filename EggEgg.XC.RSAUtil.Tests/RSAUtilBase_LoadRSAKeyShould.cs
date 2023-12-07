@@ -1,6 +1,6 @@
 namespace YYHEggEgg.XC.RSAUtil.Tests;
 
-public class RsaUtilBase_LoadRSAKeyShould
+public class RSAUtilBase_LoadRSAKeyShould
 {
     [Theory]
     [InlineData(TestRSAKeys.Pkcs1PrivateKey_2)]
