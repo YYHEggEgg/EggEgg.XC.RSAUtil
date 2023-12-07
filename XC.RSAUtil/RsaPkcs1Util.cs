@@ -21,9 +21,8 @@ namespace XC.RSAUtil
         /// </summary>
         /// <param name="publicKey">The public key can be infered from private key.</param>
         /// <param name="privateKey">If not given, this instance won't support private key features.</param>
-        /// <param name="keySize">The key length in bits, e.g. 2048-bits key.</param>
         /// <exception cref="ArgumentException">Neither <paramref name="publicKey"/> nor <paramref name="privateKey"/> has been given.</exception>
-        public RsaPkcs1Util(string? privateKey = null, string? publicKey = null, int keySize = 2048)
+        public RsaPkcs1Util(string? privateKey = null, string? publicKey = null)
         {
             if (string.IsNullOrEmpty(privateKey) && string.IsNullOrEmpty(publicKey))
             {
@@ -33,20 +32,20 @@ namespace XC.RSAUtil
             if (!string.IsNullOrEmpty(privateKey))
             {
                 PrivateRsa = RSA.Create();
-                PrivateRsa.KeySize = keySize;
                 var priRsap = CreateRsapFromPrivateKey(privateKey);
+                PrivateRsa.KeySize = CalculateKeyLength(priRsap.Modulus);
                 PrivateRsa.ImportParameters(priRsap);
 
                 if (string.IsNullOrEmpty(publicKey))
                 {
                     PublicRsa = RSA.Create();
-                    PublicRsa.KeySize = keySize;
-                    var pubRasp = new RSAParameters
+                    var pubRsap = new RSAParameters
                     {
                         Modulus = priRsap.Modulus,
                         Exponent = priRsap.Exponent
                     };
-                    PublicRsa.ImportParameters(pubRasp);
+                    PublicRsa.KeySize = CalculateKeyLength(pubRsap.Modulus);
+                    PublicRsa.ImportParameters(pubRsap);
                 }
 
             }
@@ -54,7 +53,8 @@ namespace XC.RSAUtil
             if (!string.IsNullOrEmpty(publicKey))
             {
                 PublicRsa = RSA.Create();
-                PublicRsa.KeySize = keySize;
+                var pubRsap = CreateRsapFromPublicKey(publicKey);
+                PublicRsa.KeySize = CalculateKeyLength(pubRsap.Modulus);
                 PublicRsa.ImportParameters(CreateRsapFromPublicKey(publicKey));
             }
         }

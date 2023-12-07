@@ -137,29 +137,31 @@ namespace XC.RSAUtil
         /// Load the rsa key as <see cref="RSAUtilBase"/>.
         /// </summary>
         /// <param name="rsaKey">The string rsa key, support public/private, PKCS1/PKCS8/Xml all.</param>
-        /// <param name="keySize">The bits key size, e.g. 2048-bit</param>
         /// <returns></returns>
-        public static RSAUtilBase LoadRSAKey(string rsaKey, int keySize = 2048)
+        public static RSAUtilBase LoadRSAKey(string rsaKey)
         {
             var keyType = TreatRSAKeyType(rsaKey);
             // PKCS8 Padding
             if (keyType == (RsaKeyType.Pkcs8 | RsaKeyType.Public))
-                return new RsaPkcs8Util(publicKey: rsaKey, keySize: keySize);
+                return new RsaPkcs8Util(publicKey: rsaKey);
             else if (keyType == (RsaKeyType.Pkcs8 | RsaKeyType.Private))
-                return new RsaPkcs8Util(privateKey: rsaKey, keySize: keySize);
+                return new RsaPkcs8Util(privateKey: rsaKey);
             // PKCS1 Padding
             else if (keyType == (RsaKeyType.Pkcs1 | RsaKeyType.Public))
-                return new RsaPkcs1Util(publicKey: rsaKey, keySize: keySize);
+                return new RsaPkcs1Util(publicKey: rsaKey);
             else if (keyType == (RsaKeyType.Pkcs1 | RsaKeyType.Private))
-                return new RsaPkcs1Util(privateKey: rsaKey, keySize: keySize);
+                return new RsaPkcs1Util(privateKey: rsaKey);
             // .NET XML Format
             else if (keyType == (RsaKeyType.Xml | RsaKeyType.Public))
-                return new RsaXmlUtil(publicKey: rsaKey, keySize: keySize);
+                return new RsaXmlUtil(publicKey: rsaKey);
             else if (keyType == (RsaKeyType.Xml | RsaKeyType.Private))
-                return new RsaXmlUtil(privateKey: rsaKey, keySize: keySize);
+                return new RsaXmlUtil(privateKey: rsaKey);
             else throw new ArgumentException("Invalid RSA Key!", nameof(rsaKey));
         }
 
+        /// <summary>
+        /// Return a <see cref="RsaKeyType"/> object that represents the type of <paramref name="rsaKey"/>.
+        /// </summary>
         public static RsaKeyType TreatRSAKeyType(string rsaKey)
         {
             // PKCS8 Padding
@@ -181,5 +183,13 @@ namespace XC.RSAUtil
             }
             else throw new ArgumentException("Invalid RSA Key!", nameof(rsaKey));
         }
+    
+        /// <summary>
+        /// Calculate the length (bits) from a RSA key's Modulus Length.
+        /// </summary>
+        /// <param name="modulus"></param>
+        /// <returns></returns>
+        public static int CalculateKeyLength(byte[] modulus) =>
+            (int)Math.Pow(2, Math.Log(256, 2)) * 8;
     }
 }

@@ -19,7 +19,7 @@ Install-Package EggEgg.XC.RSAUtil
 
 ### 开箱即用
 
-可使用 `RSAUtilBase.LoadRSAKey` 来快捷加载任何 XML、PKCS1、PKCS8 格式的私钥与公钥。私钥实例支持公钥的功能（公钥加密，验证签名）。
+可使用 `RSAUtilBase.LoadRSAKey` 来快捷加载任何 XML、PKCS1、PKCS8 格式的私钥与公钥，自动检测格式、密钥位数等参数。私钥实例支持公钥的功能（公钥加密，验证签名）。
 
 ### 生成密钥
 

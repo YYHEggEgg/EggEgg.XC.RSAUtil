@@ -29,6 +29,9 @@ public class RSAUtilBase_LoadRSAKeyShould
     [InlineData(TestRSAKeys.XmlPublicKey_5)]
     public void LoadRSAKey_ManyKeys(string rsakey)
     {
-        RSAUtilBase.LoadRSAKey(rsakey);
+        var rsa = RSAUtilBase.LoadRSAKey(rsakey);
+        Assert.Equal(2048, rsa.PublicRsa?.KeySize);
+        if (rsa.PrivateRsa != null)
+            Assert.Equal(2048, rsa.PrivateRsa.KeySize);
     }
 }

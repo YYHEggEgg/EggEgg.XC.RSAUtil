@@ -18,7 +18,7 @@ Install-Package EggEgg.XC.RSAUtil
 
 ### Ready to use
 
-You can use `RSAUtilBase.LoadRSAKey` to quickly load private and public keys in XML, PKCS1, and PKCS8 formats. The private key instance supports the functionality of the public key (public key encryption, signature verification).
+You can use `RSAUtilBase.LoadRSAKey` to quickly load private and public keys in XML, PKCS1, and PKCS8 formats, and paramters like the format and the bits of the RSA key can be auto-detected. The private key instance supports the functionality of the public key (public key encryption, signature verification).
 
 ### Generating keys
 

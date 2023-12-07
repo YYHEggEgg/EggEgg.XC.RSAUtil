@@ -12,7 +12,7 @@ namespace XC.RSAUtil
     /// </summary>
     public class RsaPkcs8Util:RSAUtilBase
     {
-        public RsaPkcs8Util(string? privateKey = null, string? publicKey = null, int keySize = 2048)
+        public RsaPkcs8Util(string? privateKey = null, string? publicKey = null)
         {
             if (string.IsNullOrEmpty(privateKey) && string.IsNullOrEmpty(publicKey))
             {
@@ -22,19 +22,19 @@ namespace XC.RSAUtil
             if (!string.IsNullOrEmpty(privateKey))
             {
                 PrivateRsa = RSA.Create();
-                PrivateRsa.KeySize = keySize;
                 var priRsap = CreateRsapFromPrivateKey(privateKey);
+                PrivateRsa.KeySize = CalculateKeyLength(priRsap.Modulus);
                 PrivateRsa.ImportParameters(priRsap);
 
                 if (string.IsNullOrEmpty(publicKey))
                 {
                     PublicRsa = RSA.Create();
-                    PublicRsa.KeySize = keySize;
                     var pubRsap = new RSAParameters
                     {
                         Modulus = priRsap.Modulus,
                         Exponent = priRsap.Exponent
                     };
+                    PublicRsa.KeySize = CalculateKeyLength(pubRsap.Modulus);
                     PublicRsa.ImportParameters(pubRsap);
                 }
             }
@@ -42,8 +42,8 @@ namespace XC.RSAUtil
             if (!string.IsNullOrEmpty(publicKey))
             {
                 PublicRsa = RSA.Create();
-                PublicRsa.KeySize = keySize;
                 var pubRsap = CreateRsapFromPublicKey(publicKey);
+                PublicRsa.KeySize = CalculateKeyLength(pubRsap.Modulus);
                 PublicRsa.ImportParameters(pubRsap);
             }
         }
