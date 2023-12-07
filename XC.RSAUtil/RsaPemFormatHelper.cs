@@ -23,15 +23,15 @@ namespace XC.RSAUtil
 
             int pos = 0;
 
-            while (pos<str.Length)
+            while (pos < str.Length)
             {
-                var count = str.Length - pos<64? str.Length - pos:64;
+                var count = str.Length - pos < 64 ? str.Length - pos : 64;
                 res.Add(str.Substring(pos, count));
                 pos += count;
             }
 
-            res.Add("-----END RSA PRIVATE KEY-----");
-            var resStr = string.Join(Environment.NewLine, res);
+            res.Add("-----END RSA PRIVATE KEY-----\n");
+            var resStr = string.Join("\n", res);
             return resStr;
         }
 
@@ -47,7 +47,7 @@ namespace XC.RSAUtil
                 return str;
             }
             return str.Replace("-----BEGIN RSA PRIVATE KEY-----", "").Replace("-----END RSA PRIVATE KEY-----", "")
-                .Replace(Environment.NewLine, "");
+                .Replace("\n", "");
         }
 
         /// <summary>
@@ -73,8 +73,8 @@ namespace XC.RSAUtil
                 pos += count;
             }
 
-            res.Add("-----END PRIVATE KEY-----");
-            var resStr = string.Join(Environment.NewLine, res);
+            res.Add("-----END PRIVATE KEY-----\n");
+            var resStr = string.Join("\n", res);
             return resStr;
         }
 
@@ -90,15 +90,15 @@ namespace XC.RSAUtil
                 return str;
             }
             return str.Replace("-----BEGIN PRIVATE KEY-----", "").Replace("-----END PRIVATE KEY-----", "")
-                .Replace(Environment.NewLine, "");
+                .Replace("\n", "");
         }
 
         /// <summary>
-        /// Format public key
+        /// Format pkcs8 public key
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string PublicKeyFormat(string str)
+        public static string Pkcs8PublicKeyFormat(string str)
         {
             if (str.StartsWith("-----BEGIN PUBLIC KEY-----"))
             {
@@ -114,24 +114,65 @@ namespace XC.RSAUtil
                 res.Add(str.Substring(pos, count));
                 pos += count;
             }
-            res.Add("-----END PUBLIC KEY-----");
-            var resStr = string.Join(Environment.NewLine, res);
+            res.Add("-----END PUBLIC KEY-----\n");
+            var resStr = string.Join("\n", res);
             return resStr;
         }
 
         /// <summary>
-        /// Public key format removed
+        /// Pkcs8 public key format removed
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string PublicKeyFormatRemove(string str)
+        public static string Pkcs8PublicKeyFormatRemove(string str)
         {
             if (!str.StartsWith("-----BEGIN PUBLIC KEY-----"))
             {
                 return str;
             }
             return str.Replace("-----BEGIN PUBLIC KEY-----", "").Replace("-----END PUBLIC KEY-----", "")
-                .Replace(Environment.NewLine, "");
+                .Replace("\n", "");
+        }
+
+        /// <summary>
+        /// Format pkcs1 public key
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string Pkcs1PublicKeyFormat(string str)
+        {
+            if (str.StartsWith("-----BEGIN RSA PUBLIC KEY-----"))
+            {
+                return str;
+            }
+            List<string> res = new List<string>();
+            res.Add("-----BEGIN RSA PUBLIC KEY-----");
+            int pos = 0;
+
+            while (pos < str.Length)
+            {
+                var count = str.Length - pos < 64 ? str.Length - pos : 64;
+                res.Add(str.Substring(pos, count));
+                pos += count;
+            }
+            res.Add("-----END RSA PUBLIC KEY-----\n");
+            var resStr = string.Join("\n", res);
+            return resStr;
+        }
+
+        /// <summary>
+        /// Pkcs1 public key format removed
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string Pkcs1PublicKeyFormatRemove(string str)
+        {
+            if (!str.StartsWith("-----BEGIN RSA PUBLIC KEY-----"))
+            {
+                return str;
+            }
+            return str.Replace("-----BEGIN RSA PUBLIC KEY-----", "").Replace("-----END RSA PUBLIC KEY-----", "")
+                .Replace("\n", "");
         }
     }
 }

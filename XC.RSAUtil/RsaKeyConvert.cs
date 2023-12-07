@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
 using Org.BouncyCastle.Crypto;
@@ -19,13 +20,13 @@ namespace XC.RSAUtil
     public partial class RsaKeyConvert
     {
         /// <summary>
-        /// Public Key Convert pem->xml
+        /// Public Key Convert pkcs8->xml
         /// </summary>
         /// <param name="publicKey"></param>
         /// <returns></returns>
-        public static string PublicKeyPemToXml(string publicKey)
+        public static string PublicKeyPkcs8ToXml(string publicKey)
         {
-            publicKey = RsaPemFormatHelper.PublicKeyFormat(publicKey);
+            publicKey = RsaPemFormatHelper.Pkcs8PublicKeyFormat(publicKey);
 
             PemReader pr = new PemReader(new StringReader(publicKey));
             var obj = pr.ReadObject();
@@ -46,11 +47,11 @@ namespace XC.RSAUtil
         }
 
         /// <summary>
-        /// Public Key Convert xml->pem
+        /// Public Key Convert xml->pkcs8
         /// </summary>
         /// <param name="publicKey"></param>
         /// <returns></returns>
-        public static string PublicKeyXmlToPem(string publicKey)
+        public static string PublicKeyXmlToPkcs8(string publicKey)
         {
             XElement root = XElement.Parse(publicKey);
             //Modulus
@@ -69,6 +70,77 @@ namespace XC.RSAUtil
             pWrt.Writer.Close();
             return sw.ToString();
         }
+
+        /// <summary>
+        /// Public Key Convert xml->pkcs1
+        /// </summary>
+        /// <param name="publicKey"></param>
+        /// <returns></returns>
+        public static string PublicKeyXmlToPkcs1(string publicKey)
+        {
+            var rsa = new RSACryptoServiceProvider();
+            rsa.FromXmlString(publicKey);
+
+            return RsaPemFormatHelper.Pkcs1PublicKeyFormat(Convert.ToBase64String(rsa.ExportRSAPublicKey()));
+        }
+
+        /// <summary>
+        /// Public Key Convert pkcs1->xml
+        /// </summary>
+        /// <param name="publicKey"></param>
+        /// <returns></returns>
+        public static string PublicKeyPkcs1ToXml(string publicKey)
+        {
+            publicKey = RsaPemFormatHelper.Pkcs1PublicKeyFormat(publicKey);
+
+            PemReader pr = new PemReader(new StringReader(publicKey));
+            var obj = pr.ReadObject();
+            if (!(obj is RsaKeyParameters rsaKey))
+            {
+                throw new ArgumentException("Public key format is incorrect", nameof(publicKey));
+            }
+
+            XElement publicElement = new XElement("RSAKeyValue");
+            //Modulus
+            XElement pubmodulus = new XElement("Modulus", Convert.ToBase64String(rsaKey.Modulus.ToByteArrayUnsigned()));
+            //Exponent
+            XElement pubexponent = new XElement("Exponent", Convert.ToBase64String(rsaKey.Exponent.ToByteArrayUnsigned()));
+
+            publicElement.Add(pubmodulus);
+            publicElement.Add(pubexponent);
+            return publicElement.ToString();
+        }
+
+        /// <summary>
+        /// Public Key Convert pkcs1->pkcs8
+        /// </summary>
+        /// <param name="publicKey"></param>
+        /// <returns></returns>
+        public static string PublicKeyPkcs1ToPkcs8(string publicKey)
+        {
+            publicKey = RsaPemFormatHelper.Pkcs1PublicKeyFormat(publicKey);
+
+            PemReader pr = new PemReader(new StringReader(publicKey));
+            var obj = pr.ReadObject();
+            if (!(obj is RsaKeyParameters rsaKey))
+            {
+                throw new ArgumentException("Public key format is incorrect", nameof(publicKey));
+            }
+
+            StringWriter sw = new StringWriter();
+            PemWriter pWrt = new PemWriter(sw);
+            pWrt.WriteObject(rsaKey);
+            pWrt.Writer.Close();
+            return sw.ToString();
+        }
+
+        /// <summary>
+        /// Public Key Convert pkcs8->pkcs1
+        /// </summary>
+        /// <param name="publicKey"></param>
+        /// <returns></returns>
+        public static string PublicKeyPkcs8ToPkcs1(string publicKey) =>
+            PublicKeyXmlToPkcs1(PublicKeyPkcs8ToXml(publicKey));
 
         /// <summary>
         /// Private Key Convert Pkcs1->xml

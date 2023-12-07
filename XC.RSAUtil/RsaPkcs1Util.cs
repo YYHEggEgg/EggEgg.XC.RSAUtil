@@ -65,7 +65,7 @@ namespace XC.RSAUtil
         /// <returns></returns>
         protected sealed override RSAParameters CreateRsapFromPublicKey(string publicKey)
         {
-            publicKey = RsaPemFormatHelper.PublicKeyFormat(publicKey);
+            publicKey = RsaPemFormatHelper.Pkcs8PublicKeyFormat(publicKey);
 
             PemReader pr = new PemReader(new StringReader(publicKey));
             var obj = pr.ReadObject();

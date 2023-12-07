@@ -55,7 +55,7 @@ namespace XC.RSAUtil
 		/// <returns></returns>
 		protected sealed override RSAParameters CreateRsapFromPublicKey(string publicKey)
         {
-            publicKey = RsaPemFormatHelper.PublicKeyFormatRemove(publicKey);
+            publicKey = RsaPemFormatHelper.Pkcs8PublicKeyFormatRemove(publicKey);
             RsaKeyParameters publicKeyParam = (RsaKeyParameters)PublicKeyFactory.CreateKey(Convert.FromBase64String(publicKey));
             var rsap = new RSAParameters
             {
