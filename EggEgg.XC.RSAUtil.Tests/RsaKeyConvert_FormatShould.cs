@@ -9,7 +9,7 @@ public class RsaKeyConvert_FormatShould
     [InlineData(TestRSAKeys.Pkcs1PrivateKey_5, TestRSAKeys.Pkcs8PrivateKey_5)]
     public void Format_Private_Pkcs1ToPkcs8(string input, string expected)
     {
-        Assert.Equal(expected, RsaKeyConvert.Format(input, RsaKeyType.Pkcs1 | RsaKeyType.Private, RsaKeyType.Pkcs8 | RsaKeyType.Private));
+        Assert.Equal(expected.ReplaceLineEndings(), RsaKeyConvert.Format(input, RsaKeyType.Pkcs1 | RsaKeyType.Private, RsaKeyType.Pkcs8 | RsaKeyType.Private));
     }
 
     [Theory]
@@ -19,7 +19,7 @@ public class RsaKeyConvert_FormatShould
     [InlineData(TestRSAKeys.Pkcs8PrivateKey_5, TestRSAKeys.Pkcs1PrivateKey_5)]
     public void Format_Private_Pkcs8ToPkcs1(string input, string expected)
     {
-        Assert.Equal(expected, RsaKeyConvert.Format(input, RsaKeyType.Pkcs8 | RsaKeyType.Private, RsaKeyType.Pkcs1 | RsaKeyType.Private));
+        Assert.Equal(expected.ReplaceLineEndings(), RsaKeyConvert.Format(input, RsaKeyType.Pkcs8 | RsaKeyType.Private, RsaKeyType.Pkcs1 | RsaKeyType.Private));
     }
 
     [Theory]
@@ -29,7 +29,7 @@ public class RsaKeyConvert_FormatShould
     [InlineData(TestRSAKeys.Pkcs1PrivateKey_5, TestRSAKeys.XmlPrivateKey_5)]
     public void Format_Private_Pkcs1ToXml(string input, string expected)
     {
-        Assert.Equal(expected, RsaKeyConvert.Format(input, RsaKeyType.Pkcs1 | RsaKeyType.Private, RsaKeyType.Xml | RsaKeyType.Private));
+        Assert.Equal(expected.ReplaceLineEndings(), RsaKeyConvert.Format(input, RsaKeyType.Pkcs1 | RsaKeyType.Private, RsaKeyType.Xml | RsaKeyType.Private));
     }
 
     [Theory]
@@ -39,7 +39,7 @@ public class RsaKeyConvert_FormatShould
     [InlineData(TestRSAKeys.XmlPrivateKey_5, TestRSAKeys.Pkcs1PrivateKey_5)]
     public void Format_Private_XmlToPkcs1(string input, string expected)
     {
-        Assert.Equal(expected, RsaKeyConvert.Format(input, RsaKeyType.Xml | RsaKeyType.Private, RsaKeyType.Pkcs1 | RsaKeyType.Private));
+        Assert.Equal(expected.ReplaceLineEndings(), RsaKeyConvert.Format(input, RsaKeyType.Xml | RsaKeyType.Private, RsaKeyType.Pkcs1 | RsaKeyType.Private));
     }
 
     [Theory]
@@ -49,7 +49,7 @@ public class RsaKeyConvert_FormatShould
     [InlineData(TestRSAKeys.Pkcs8PrivateKey_5, TestRSAKeys.XmlPrivateKey_5)]
     public void Format_Private_Pkcs8ToXml(string input, string expected)
     {
-        Assert.Equal(expected, RsaKeyConvert.Format(input, RsaKeyType.Pkcs8 | RsaKeyType.Private, RsaKeyType.Xml | RsaKeyType.Private));
+        Assert.Equal(expected.ReplaceLineEndings(), RsaKeyConvert.Format(input, RsaKeyType.Pkcs8 | RsaKeyType.Private, RsaKeyType.Xml | RsaKeyType.Private));
     }
 
     [Theory]
@@ -59,7 +59,7 @@ public class RsaKeyConvert_FormatShould
     [InlineData(TestRSAKeys.XmlPrivateKey_5, TestRSAKeys.Pkcs8PrivateKey_5)]
     public void Format_Private_XmlToPkcs8(string input, string expected)
     {
-        Assert.Equal(expected, RsaKeyConvert.Format(input, RsaKeyType.Xml | RsaKeyType.Private, RsaKeyType.Pkcs8 | RsaKeyType.Private));
+        Assert.Equal(expected.ReplaceLineEndings(), RsaKeyConvert.Format(input, RsaKeyType.Xml | RsaKeyType.Private, RsaKeyType.Pkcs8 | RsaKeyType.Private));
     }
 
     [Theory]
@@ -69,7 +69,7 @@ public class RsaKeyConvert_FormatShould
     [InlineData(TestRSAKeys.Pkcs1PublicKey_5, TestRSAKeys.Pkcs8PublicKey_5)]
     public void Format_Public_Pkcs1ToPkcs8(string input, string expected)
     {
-        Assert.Equal(expected, RsaKeyConvert.Format(input, RsaKeyType.Pkcs1 | RsaKeyType.Public, RsaKeyType.Pkcs8 | RsaKeyType.Public));
+        Assert.Equal(expected.ReplaceLineEndings(), RsaKeyConvert.Format(input, RsaKeyType.Pkcs1 | RsaKeyType.Public, RsaKeyType.Pkcs8 | RsaKeyType.Public));
     }
 
     [Theory]
@@ -79,7 +79,7 @@ public class RsaKeyConvert_FormatShould
     [InlineData(TestRSAKeys.Pkcs8PublicKey_5, TestRSAKeys.Pkcs1PublicKey_5)]
     public void Format_Public_Pkcs8ToPkcs1(string input, string expected)
     {
-        Assert.Equal(expected, RsaKeyConvert.Format(input, RsaKeyType.Pkcs8 | RsaKeyType.Public, RsaKeyType.Pkcs1 | RsaKeyType.Public));
+        Assert.Equal(expected.ReplaceLineEndings(), RsaKeyConvert.Format(input, RsaKeyType.Pkcs8 | RsaKeyType.Public, RsaKeyType.Pkcs1 | RsaKeyType.Public));
     }
 
     [Theory]
@@ -89,7 +89,7 @@ public class RsaKeyConvert_FormatShould
     [InlineData(TestRSAKeys.Pkcs1PublicKey_5, TestRSAKeys.XmlPublicKey_5)]
     public void Format_Public_Pkcs1ToXml(string input, string expected)
     {
-        Assert.Equal(expected, RsaKeyConvert.Format(input, RsaKeyType.Pkcs1 | RsaKeyType.Public, RsaKeyType.Xml | RsaKeyType.Public));
+        Assert.Equal(expected.ReplaceLineEndings(), RsaKeyConvert.Format(input, RsaKeyType.Pkcs1 | RsaKeyType.Public, RsaKeyType.Xml | RsaKeyType.Public));
     }
 
     [Theory]
@@ -99,7 +99,7 @@ public class RsaKeyConvert_FormatShould
     [InlineData(TestRSAKeys.XmlPublicKey_5, TestRSAKeys.Pkcs1PublicKey_5)]
     public void Format_Public_XmlToPkcs1(string input, string expected)
     {
-        Assert.Equal(expected, RsaKeyConvert.Format(input, RsaKeyType.Xml | RsaKeyType.Public, RsaKeyType.Pkcs1 | RsaKeyType.Public));
+        Assert.Equal(expected.ReplaceLineEndings(), RsaKeyConvert.Format(input, RsaKeyType.Xml | RsaKeyType.Public, RsaKeyType.Pkcs1 | RsaKeyType.Public));
     }
 
     [Theory]
@@ -109,7 +109,7 @@ public class RsaKeyConvert_FormatShould
     [InlineData(TestRSAKeys.Pkcs8PublicKey_5, TestRSAKeys.XmlPublicKey_5)]
     public void Format_Public_Pkcs8ToXml(string input, string expected)
     {
-        Assert.Equal(expected, RsaKeyConvert.Format(input, RsaKeyType.Pkcs8 | RsaKeyType.Public, RsaKeyType.Xml | RsaKeyType.Public));
+        Assert.Equal(expected.ReplaceLineEndings(), RsaKeyConvert.Format(input, RsaKeyType.Pkcs8 | RsaKeyType.Public, RsaKeyType.Xml | RsaKeyType.Public));
     }
 
     [Theory]
@@ -119,6 +119,6 @@ public class RsaKeyConvert_FormatShould
     [InlineData(TestRSAKeys.XmlPublicKey_5, TestRSAKeys.Pkcs8PublicKey_5)]
     public void Format_Public_XmlToPkcs8(string input, string expected)
     {
-        Assert.Equal(expected, RsaKeyConvert.Format(input, RsaKeyType.Xml | RsaKeyType.Public, RsaKeyType.Pkcs8 | RsaKeyType.Public));
+        Assert.Equal(expected.ReplaceLineEndings(), RsaKeyConvert.Format(input, RsaKeyType.Xml | RsaKeyType.Public, RsaKeyType.Pkcs8 | RsaKeyType.Public));
     }
 }
