@@ -13,6 +13,7 @@
     <Copyright>CopyRight 2018-2019 stulzq</Copyright>
     <PackageProjectUrl>https://github.com/YYHEggEgg/RSAUtil</PackageProjectUrl>
     <PackageTags>RSA,RSA Xml,RSA Pkcs1,RSA Pkcs8,RSA Convert,RSA Format,Pem,RSAUtil,RSAHelper</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>Notice: This package is not the official version of GitHub Repository stulzq/RSAUtil but a custom modified version. Please go to https://www.nuget.org/packages/XC.RSAUtil for the official one.</PackageReleaseNotes>
     <IncludeSymbols>True</IncludeSymbols>
     <PackageId>EggEgg.$(AssemblyName)</PackageId>
@@ -32,6 +33,10 @@
 
   <ItemGroup>
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
 </Project>

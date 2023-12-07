@@ -1,114 +1,60 @@
+EN | [中文](README_Chinese.md)
+
 # Notice
 
 This package is **not the official version of GitHub Repository [stulzq/RSAUtil](https://github.com/stulzq/RSAUtil)** but a custom modified version. Please go to [NuGet XC.RSAUtil](https://www.nuget.org/packages/XC.RSAUtil) for the official one.
 
-# RSAUtil  [中文文档](https://github.com/YYHEggEgg/RSAUtil/blob/master/README_Chinese.md "中文文档")
+# RSAUtil
+.NET Core RSA algorithm helper tool, supports data encryption, decryption, signing, and signature verification. Supports three key formats: XML, PKCS1, and PKCS8. Supports key conversion for these three formats.
 
-[![Build Status](https://ci2.xcmaster.com/job/RSAUtil/job/master/badge/icon)](https://ci2.xcmaster.com/job/RSAUtil/job/master/)
+[![Latest version](https://img.shields.io/nuget/v/EggEgg.XC.RSAUtil.svg?style=flat-square)](https://www.nuget.org/packages/EggEgg.XC.RSAUtil/)
 
-.NET Core RSA algorithm using the help tool.It supports data encryption, decryption, signature and verification signature.It supports three key formats, namely: xml, pkcs1, pkcs8.It also supports key conversion for these three formats.Last also support pem formatting.
-
-Thanks for onovotny's [bc-csharp](https://github.com/onovotny/bc-csharp "bc-csharp")
-
-[![Latest version](https://img.shields.io/nuget/v/XC.RSAUtil.svg?style=flat-square)](https://www.nuget.org/packages/XC.RSAUtil/)
-
-# Install
-
+## Installation via NuGet
 ````shell
-Install-Package XC.RSAUtil
+Install-Package EggEgg.XC.RSAUtil
 ````
 
-> The old package name is `XC.Framework.Security.RSAUtil`. Now renamed `XC.RSAUtil` and will continue to use.
+## Documentation
 
-# Doc
+### Ready to use
 
-### Generate the key
+You can use `RSAUtilBase.LoadRSAKey` to quickly load private and public keys in XML, PKCS1, and PKCS8 formats. The private key instance supports the functionality of the public key (public key encryption, signature verification).
 
->Use class `RsaKeyGenerator`.The result returned is a list of two-element strings,Element 1 is the private key and element 2 is the public key.
+### Generating keys
 
-Format: XML
+> Use the "RsaKeyGenerator" class. The result returned is a `KeyResult` containing `privateKey` and `publicKey`.
 
-```csharp
-var keys = RsaKeyGenerator.XmlKey(2048);
-var privateKey = keys.privateKey;
-var publicKey = key.publicKey;
-```
-
-Format: Pkcs1
+Format:
 
 ```csharp
-var keys = RsaKeyGenerator.Pkcs1Key(2048);
-var privateKey = keys.privateKey;
-var publicKey = key.publicKey;
-```
-
-Format: Pkcs8
-
-```csharp
-var keys = RsaKeyGenerator.Pkcs8Key(2048);
+var keys = RsaKeyGenerator.XmlKey(2048); // XML format
+// var keys = RsaKeyGenerator.Pkcs1Key(2048); // PKCS1 format
+// var keys = RsaKeyGenerator.Pkcs8Key(2048); // PKCS8 format
 var privateKey = keys.privateKey;
 var publicKey = key.publicKey;
 ```
 
 ### RSA key conversion
 
->Use class `RsaKeyConvert`.It  supports key conversion for these three formats,namely: xml, pkcs1, pkcs8.
+You can freely convert key formats using `RsaKeyConvert.Format()`. For example:
 
-##### XML->Pkcs1:
+```cs
+RsaKeyConvert.Format(key, RsaKeyType.Private | RsaKeyType.Xml, RsaKeyType.Private | RsaKeyType.Pkcs1);
+RsaKeyConvert.Format(key, RsaKeyType.Public | RsaKeyType.Xml, RsaKeyType.Public | RsaKeyType.Pkcs1);
+RsaKeyConvert.Format(key, RsaKeyType.Private | RsaKeyType.Pkcs1, RsaKeyType.Public | RsaKeyType.Pkcs8);
+```
 
-- Private Key : `RsaKeyConvert.PrivateKeyXmlToPkcs1()`
-- Public Key  : `RsaKeyConvert.PublicKeyXmlToPem()`
+Other hardcoded conversion methods can also be used under the `RsaKeyConvert` class.
 
-##### XML->Pkcs8:
+### Encryption, decryption, signing, and signature verification
 
-- Private Key : `RsaKeyConvert.PrivateKeyXmlToPkcs8()`
-- Public Key  : `RsaKeyConvert.PublicKeyXmlToPem()`
+> XML, Pkcs1, and Pkcs8 correspond to the classes: `RsaXmlUtil`, `RsaPkcs1Util`, `RsaPkcs8Util`. They inherit from the abstract class `RSAUtilBase`.
 
-##### Pkcs1->XML:
-
-- Private Key : `RsaKeyConvert.PrivateKeyPkcs1ToXml()`
-- Public Key  : `RsaKeyConvert.PublicKeyPemToXml()`
-
-##### Pkcs1->Pkcs8:
-
-- Private Key : `RsaKeyConvert.PrivateKeyPkcs1ToPkcs8()`
-- Public Key  : No conversion required
-
-##### Pkcs8->XML:
-
-- Private Key : `RsaKeyConvert.PrivateKeyPkcs8ToXml()`
-- Public Key  : `RsaKeyConvert.PublicKeyPemToXml()`
-
-##### Pkcs8->Pkcs1:
-
-- Private Key : `RsaKeyConvert.PrivateKeyPkcs8ToPkcs1()`
-- Public Key  : No conversion required
-
-### Encrypt, decrypt, sign, and verify signatures
-
->XML, Pkcs1, Pkcs8 respectively corresponding categories: `RsaXmlUtil`, `RsaPkcs1Util`, `RsaPkcs8Util`.They inherit from the abstract class `RSAUtilBase`
-
-- Encrypt: `RSAUtilBase.RsaEncrypt()`
-- Decrypt: `RSAUtilBase.RsaDecrypt()`
+- Encryption: `RSAUtilBase.RsaEncrypt()`
+- Decryption: `RSAUtilBase.RsaDecrypt()`
 - Sign: `RSAUtilBase.SignData()`
-- Verify: `RSAUtilBase.VerifyData()`
+- Verification: `RSAUtilBase.VerifyData()`
 
-### PEM formatting
+## Open-source components used
 
->Use class `RsaPemFormatHelper`.
-
-- Format Pkcs1 format private key: `RsaPemFormatHelper.Pkcs1PrivateKeyFormat()`
-
-- Remove the Pkcs1 format private key format: `RsaPemFormatHelper.Pkcs1PrivateKeyFormatRemove()`
-
-- Format Pkcs8 format private key: `RsaPemFormatHelper.Pkcs8PrivateKeyFormat()`
-
-- Remove the Pkcs8 format private key format: `RsaPemFormatHelper.Pkcs8PrivateKeyFormatRemove()`
-
-## Depending component
-
- [bc-csharp](https://github.com/onovotny/bc-csharp "bc-csharp") - onovotny
-
-## Example(s)
-
-[dotnetrsa](https://github.com/stulzq/dotnetrsa) - DotnetRSA is a .NET Core Global Tool, which can help you generate three kinds of format keys: xml, pkcs1, pkcs8, and shift keys' format from one to another. 
+[bc-csharp](https://github.com/onovotny/bc-csharp "bc-csharp") - onovotny
