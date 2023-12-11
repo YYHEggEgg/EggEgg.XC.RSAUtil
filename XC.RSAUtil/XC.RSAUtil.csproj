@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
-    <Version>0.136.0-rc03</Version>
+    <Version>136.0.0</Version>
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>EggEgg.XC.RSAUtil</Title>
@@ -11,8 +11,9 @@
     <Company>YYHEggEgg</Company>
     <Description>(NOT OFFICIAL) .NET Core RSA algorithm using the help tool.It supports data encryption, decryption, signature and verification signature.It supports three key formats, namely: xml, pkcs1, pkcs8.It also supports key conversion for these three formats.Last also support pem formatting.</Description>
     <Copyright>CopyRight 2018-2019 stulzq</Copyright>
-    <PackageProjectUrl>https://github.com/YYHEggEgg/RSAUtil</PackageProjectUrl>
-    <PackageTags>RSA,RSA Xml,RSA Pkcs1,RSA Pkcs8,RSA Convert,RSA Format,Pem,RSAUtil,RSAHelper</PackageTags>
+    <PackageProjectUrl>https://github.com/YYHEggEgg/EggEgg.XC.RSAUtil</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/YYHEggEgg/EggEgg.XC.RSAUtil</RepositoryUrl>
+    <PackageTags>RSA,Pem</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>Notice: This package is not the official version of GitHub Repository stulzq/RSAUtil but a custom modified version. Please go to https://www.nuget.org/packages/XC.RSAUtil for the official one.</PackageReleaseNotes>
     <IncludeSymbols>True</IncludeSymbols>
