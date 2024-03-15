@@ -40,9 +40,17 @@ var publicKey = key.publicKey;
 使用 `RsaKeyConvert.Format()` 可进行密钥格式间的自由转换。例如：
 
 ```cs
-RsaKeyConvert.Format(key, RsaKeyType.Private | RsaKeyType.Xml, RsaKeyType.Private | RsaKeyType.Pkcs1);
-RsaKeyConvert.Format(key, RsaKeyType.Public | RsaKeyType.Xml, RsaKeyType.Public | RsaKeyType.Pkcs1);
-RsaKeyConvert.Format(key, RsaKeyType.Private | RsaKeyType.Pkcs1, RsaKeyType.Public | RsaKeyType.Pkcs8);
+RsaKeyConvert.Format(key,
+    new RsaKeyFeature { IsPrivate = true; Format = RsaKeyFormat.Xml; Padding = RsaKeyPadding.Xml }, 
+    new RsaKeyFeature { IsPrivate = true; Format = RsaKeyFormat.Pem; Padding = RsaKeyPadding.Pkcs1 });
+
+RsaKeyConvert.Format(key,
+    new RsaKeyFeature { IsPrivate = false; Format = RsaKeyFormat.Xml; Padding = RsaKeyPadding.Xml },
+    new RsaKeyFeature { IsPrivate = false; Format = RsaKeyFormat.Pem; Padding = RsaKeyPadding.Pkcs1 });
+
+RsaKeyConvert.Format(key, 
+    new RsaKeyFeature { IsPrivate = true; Format = RsaKeyFormat.Pem; Padding = RsaKeyPadding.Pkcs1 },
+    new RsaKeyFeatire { IsPrivate = false; Format = RsaKeyFormat.Pem; Padding = RsaKeyPadding.Pkcs8 });
 ```
 
 也可使用 `RsaKeyConvert` 类下其他硬编码转化格式的方法。

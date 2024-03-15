@@ -2,36 +2,21 @@ using System;
 
 namespace XC.RSAUtil
 {
-    [Flags]
-    public enum RsaKeyType
-    {
-        None = 0,
-        Xml = 2 << 0,
-        Pkcs1 = 2 << 1,
-        Pkcs8 = 2 << 2,
-        Private = 2 << 3,
-        Public = 2 << 4,
-    }
-
     public partial class RsaKeyConvert
     {
-        private static void ValidateTransferRSAKeyTypes(RsaKeyType inputKeyType, RsaKeyType outputKeyType)
+        private static void ValidateTransferRSAKeyTypes(RsaKeyFeature inputKeyType, RsaKeyFeature outputKeyType)
         {
-            inputKeyType.ValidateRsaKeyType(nameof(inputKeyType));
-            outputKeyType.ValidateRsaKeyType(nameof(outputKeyType));
+            inputKeyType.Validate(nameof(inputKeyType));
+            outputKeyType.Validate(nameof(outputKeyType));
 
-            if (((inputKeyType & RsaKeyType.Public) != 0) && ((outputKeyType & RsaKeyType.Private) != 0))
+            if (!inputKeyType.IsPrivate && outputKeyType.IsPrivate)
             {
                 throw new ArgumentException($"Cannot convert public key to private key.");
             }
 
-            if ((((inputKeyType & RsaKeyType.Private) != 0) && ((outputKeyType & RsaKeyType.Private) != 0)) ||
-                (((inputKeyType & RsaKeyType.Public) != 0) && ((outputKeyType & RsaKeyType.Public) != 0)))
+            if (!(inputKeyType.IsPrivate ^ outputKeyType.IsPrivate))
             {
-                if ((((inputKeyType & RsaKeyType.Xml) != 0) && ((outputKeyType & RsaKeyType.Xml) != 0)) ||
-                    (((inputKeyType & RsaKeyType.Pkcs1) != 0) && ((outputKeyType & RsaKeyType.Pkcs1) != 0)) ||
-                    (((inputKeyType & RsaKeyType.Pkcs8) != 0) && ((outputKeyType & RsaKeyType.Pkcs8) != 0))
-                )
+                if (inputKeyType.Padding == outputKeyType.Padding)
                 {
                     throw new ArgumentException($"Input and output key cannot be the same padding when input and output are both private/public keys.");
                 }
@@ -41,147 +26,143 @@ namespace XC.RSAUtil
         /// <summary>
         /// Select convert type yourself.
         /// </summary>
-        public static string Format(string rsakey, RsaKeyType inputKeyType, RsaKeyType outputKeyType)
+        public static string Format(string rsakey, RsaKeyFeature inputKeyType, RsaKeyFeature outputKeyType)
         {
             ValidateTransferRSAKeyTypes(inputKeyType, outputKeyType);
 
             string? res = null;
 
-            if ((inputKeyType & RsaKeyType.Xml) != 0)
+            switch (inputKeyType.Padding)
             {
-                if ((inputKeyType & RsaKeyType.Private) != 0)
-                {
-                    if ((outputKeyType & RsaKeyType.Pkcs1) != 0)
+                case RsaKeyPadding.Xml:
+                    if (inputKeyType.IsPrivate)
                     {
-                        res = PrivateKeyXmlToPkcs1(rsakey);
-                        if ((outputKeyType & RsaKeyType.Public) != 0)
-                            res = PrivateKeyPkcs1ToPublic(res);
+                        switch (outputKeyType.Padding)
+                        {
+                            case RsaKeyPadding.Pkcs1:
+                                res = PrivateKeyXmlToPkcs1(rsakey);
+                                if (!outputKeyType.IsPrivate)
+                                    res = PrivateKeyPkcs1ToPublic(res);
+                                break;
+                            case RsaKeyPadding.Pkcs8:
+                                res = PrivateKeyXmlToPkcs8(rsakey);
+                                if (!outputKeyType.IsPrivate)
+                                    res = PrivateKeyPkcs8ToPublic(res);
+                                break;
+                            case RsaKeyPadding.Xml:
+                                if (!outputKeyType.IsPrivate)
+                                    res = PrivateKeyXmlToPublic(rsakey);
+                                break;
+                        }
                     }
-                    else if ((outputKeyType & RsaKeyType.Pkcs8) != 0)
+                    else
                     {
-                        res = PrivateKeyXmlToPkcs8(rsakey);
-                        if ((outputKeyType & RsaKeyType.Public) != 0)
-                            res = PrivateKeyPkcs8ToPublic(res);
+                        switch (outputKeyType.Padding)
+                        {
+                            case RsaKeyPadding.Pkcs1:
+                                res = PublicKeyXmlToPkcs1(rsakey);
+                                break;
+                            case RsaKeyPadding.Pkcs8:
+                                res = PublicKeyXmlToPkcs8(rsakey); 
+                                break;
+                        }
                     }
-                    else if ((outputKeyType & RsaKeyType.Xml) != 0)
+                    break;
+                case RsaKeyPadding.Pkcs1:
+                    if (inputKeyType.IsPrivate)
                     {
-                        if ((outputKeyType & RsaKeyType.Public) != 0)
-                            res = PrivateKeyXmlToPublic(rsakey);
+                        switch (outputKeyType.Padding)
+                        {
+                            case RsaKeyPadding.Xml:
+                                res = PrivateKeyPkcs1ToXml(rsakey);
+                                if (!outputKeyType.IsPrivate)
+                                    res = PrivateKeyXmlToPublic(res);
+                                break;
+                            case RsaKeyPadding.Pkcs8:
+                                res = PrivateKeyPkcs1ToPkcs8(rsakey);
+                                if (!outputKeyType.IsPrivate)
+                                    res = PrivateKeyPkcs1ToPublic(res);
+                                break;
+                            case RsaKeyPadding.Pkcs1:
+                                if (!outputKeyType.IsPrivate)
+                                    res = PrivateKeyPkcs1ToPublic(rsakey);
+                                break;
+                        }
                     }
-                }
-                else if ((inputKeyType & RsaKeyType.Public) != 0)
-                {
-                    if ((outputKeyType & RsaKeyType.Pkcs1) != 0)
+                    else
                     {
-                        res = PublicKeyXmlToPkcs1(rsakey);
+                        switch (outputKeyType.Padding)
+                        {
+                            case RsaKeyPadding.Xml:
+                                res = PublicKeyPkcs1ToXml(rsakey);
+                                break;
+                            case RsaKeyPadding.Pkcs8:
+                                res = PublicKeyPkcs1ToPkcs8(rsakey);
+                                break;
+                        }
                     }
-                    else if ((outputKeyType & RsaKeyType.Pkcs8) != 0)
+                    break;
+                case RsaKeyPadding.Pkcs8:
+                    if (inputKeyType.IsPrivate)
                     {
-                        res = PublicKeyXmlToPkcs8(rsakey);
+                        switch (outputKeyType.Padding)
+                        {
+                            case RsaKeyPadding.Xml:
+                                res = PrivateKeyPkcs8ToXml(rsakey);
+                                if (!outputKeyType.IsPrivate)
+                                    res = PrivateKeyXmlToPublic(res);
+                                break;
+                            case RsaKeyPadding.Pkcs1:
+                                res = PrivateKeyPkcs8ToPkcs1(rsakey);
+                                if (!outputKeyType.IsPrivate)
+                                    res = PrivateKeyPkcs1ToPublic(res);
+                                break;
+                            case RsaKeyPadding.Pkcs8:
+                                if (!outputKeyType.IsPrivate)
+                                    res = PrivateKeyPkcs8ToPublic(rsakey);
+                                break;
+                        }
                     }
-                }
+                    else
+                    {
+                        switch (outputKeyType.Padding)
+                        {
+                            case RsaKeyPadding.Xml:
+                                res = PublicKeyPkcs8ToXml(rsakey);
+                                break;
+                            case RsaKeyPadding.Pkcs1:
+                                res = PublicKeyPkcs8ToPkcs1(rsakey);
+                                break;
+                        }
+                    }
+                    break;
             }
-            else if ((inputKeyType & RsaKeyType.Pkcs1) != 0)
-            {
-                if ((inputKeyType & RsaKeyType.Private) != 0)
-                {
-                    if ((outputKeyType & RsaKeyType.Xml) != 0)
-                    {
-                        res = PrivateKeyPkcs1ToXml(rsakey);
-                        if ((outputKeyType & RsaKeyType.Public) != 0)
-                            res = PrivateKeyXmlToPublic(res);
-                    }
-                    else if ((outputKeyType & RsaKeyType.Pkcs8) != 0)
-                    {
-                        res = PrivateKeyPkcs1ToPkcs8(rsakey);
-                        if ((outputKeyType & RsaKeyType.Public) != 0)
-                            res = PrivateKeyPkcs1ToPublic(res);
-                    }
-                    else if ((outputKeyType & RsaKeyType.Pkcs1) != 0)
-                    {
-                        if ((outputKeyType & RsaKeyType.Public) != 0)
-                            res = PrivateKeyPkcs1ToPublic(rsakey);
-                    }
-                }
-                else if ((inputKeyType & RsaKeyType.Public) != 0)
-                {
-                    if ((outputKeyType & RsaKeyType.Xml) != 0)
-                    {
-                        res = PublicKeyPkcs1ToXml(rsakey);
-                    }
-                    else if ((outputKeyType & RsaKeyType.Pkcs8) != 0)
-                    {
-                        res = PublicKeyPkcs1ToPkcs8(rsakey);
-                    }
-                }
-            }
-            else if ((inputKeyType & RsaKeyType.Pkcs8) != 0)
-            {
-                if ((inputKeyType & RsaKeyType.Private) != 0)
-                {
-                    if ((outputKeyType & RsaKeyType.Xml) != 0)
-                    {
-                        res = PrivateKeyPkcs8ToXml(rsakey);
-                        if ((outputKeyType & RsaKeyType.Public) != 0)
-                            res = PrivateKeyXmlToPublic(res);
-                    }
-                    else if ((outputKeyType & RsaKeyType.Pkcs1) != 0)
-                    {
-                        res = PrivateKeyPkcs8ToPkcs1(rsakey);
-                        if ((outputKeyType & RsaKeyType.Public) != 0)
-                            res = PrivateKeyPkcs1ToPublic(res);
-                    }
-                    else if ((outputKeyType & RsaKeyType.Pkcs8) != 0)
-                    {
-                        if ((outputKeyType & RsaKeyType.Public) != 0)
-                            res = PrivateKeyPkcs8ToPublic(rsakey);
-                    }
-                }
-                else if ((inputKeyType & RsaKeyType.Public) != 0)
-                {
-                    if ((outputKeyType & RsaKeyType.Xml) != 0)
-                    {
-                        res = PublicKeyPkcs8ToXml(rsakey);
-                    }
-                    else if ((outputKeyType & RsaKeyType.Pkcs1) != 0)
-                    {
-                        res = PublicKeyPkcs8ToPkcs1(rsakey);
-                    }
-                }
-            }
+
+            
             return res ?? throw new InvalidOperationException("Unknown format condition: please report to EggEgg.XC.RSAUtil.");
         }
     }
 
-    public static class RsaKeyTypeExtension_HIFBHDWFWES
+    public static class RsaKeyFeatureExtension_HIFBHDWFWES
     {
-        public static void ValidateRsaKeyType(this RsaKeyType keyType, string? paramName = null)
+        public static void Validate(this RsaKeyFeature keyType, string? paramName = null)
         {
-            if (keyType == RsaKeyType.None)
-            {
-                throw new ArgumentException("A RSA Key with no flags is invalid.");
-            }
-            if (((keyType & RsaKeyType.Private) != 0) && ((keyType & RsaKeyType.Public) != 0))
-            {
-                throw new ArgumentException("Cannot provide a key that is both private and public.");
-            }
-            if ((((keyType & RsaKeyType.Xml) != 0) && ((keyType & RsaKeyType.Pkcs1) != 0)) ||
-                (((keyType & RsaKeyType.Xml) != 0) && ((keyType & RsaKeyType.Pkcs8) != 0)) ||
-                (((keyType & RsaKeyType.Pkcs1) != 0) && ((keyType & RsaKeyType.Pkcs8) != 0))
-            )
-            {
-                throw new ArgumentException("Cannot provide a key that have multiple paddings.");
-            }
-            if (((keyType & RsaKeyType.Private) == 0) && ((keyType & RsaKeyType.Public) == 0))
-            {
-                throw new ArgumentException("RSA Key should be either private or public.", paramName);
-            }
-            if (((keyType & RsaKeyType.Xml) == 0) &&
-                ((keyType & RsaKeyType.Pkcs1) == 0) &&
-                ((keyType & RsaKeyType.Pkcs8) == 0)
-            )
-            {
+            if (keyType.Padding == RsaKeyPadding.Invalid)
                 throw new ArgumentException("RSA key should have one padding.", paramName);
+
+            switch (keyType.Format)
+            {
+                case RsaKeyFormat.Invalid:
+                    throw new ArgumentException("A RSA Key with no flags is invalid.", paramName);
+                case RsaKeyFormat.Xml:
+                    if (keyType.Padding != RsaKeyPadding.Xml)
+                        throw new ArgumentException("The XML RSA Key Padding should be set as Xml.", paramName);
+                    break;
+                case RsaKeyFormat.Der:
+                case RsaKeyFormat.Pem:
+                    if (keyType.Padding == RsaKeyPadding.Xml)
+                        throw new ArgumentException("The Xml Padding should only be used when Format is Xml.", paramName);
+                    break;
             }
         }
     }
