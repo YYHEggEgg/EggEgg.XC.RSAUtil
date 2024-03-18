@@ -5,9 +5,7 @@
 This package is **not the official version of GitHub Repository [stulzq/RSAUtil](https://github.com/stulzq/RSAUtil)** but a custom modified version. Please go to [NuGet XC.RSAUtil](https://www.nuget.org/packages/XC.RSAUtil) for the official one.
 
 # RSAUtil
-.NET Core RSA 算法使用帮助工具，支持数据加密，解密，签名和验证签名，支持 XML、PKCS1、PKCS8 三种密钥格式，支持这三种格式的密钥转换。
-
-此外，相比原版它还支持 `.der` 密钥。
+.NET Core RSA 工具，支持数据加密，解密，签名和验证签名，支持 XML、PKCS1、PKCS8、DER 4 种密钥格式，支持这 4 种格式的密钥转换。
 
 [![Latest version](https://img.shields.io/nuget/v/EggEgg.XC.RSAUtil.svg?style=flat-square)](https://www.nuget.org/packages/EggEgg.XC.RSAUtil/)
 

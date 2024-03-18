@@ -5,9 +5,7 @@ EN | [中文](README_Chinese.md)
 This package is **not the official version of GitHub Repository [stulzq/RSAUtil](https://github.com/stulzq/RSAUtil)** but a custom modified version. Please go to [NuGet XC.RSAUtil](https://www.nuget.org/packages/XC.RSAUtil) for the official one.
 
 # RSAUtil
-.NET Core RSA algorithm helper tool, supports data encryption, decryption, signing, and signature verification. Supports three key formats: XML, PKCS1, and PKCS8. Supports key conversion for these three formats.
-
-Compared to the original version, this fork also supports `.der` keys.
+A .NET Core RSA tool that provides the ability of data encryption, decryption, signing and verifying signature. It supports using and converting RSA keys of 4 key formats, namely: xml, pkcs1, pkcs8, der.
 
 [![Latest version](https://img.shields.io/nuget/v/EggEgg.XC.RSAUtil.svg?style=flat-square)](https://www.nuget.org/packages/EggEgg.XC.RSAUtil/)
 
