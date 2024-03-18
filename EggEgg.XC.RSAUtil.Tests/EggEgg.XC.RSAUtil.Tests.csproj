@@ -26,4 +26,10 @@
     <ProjectReference Include="..\XC.RSAUtil\XC.RSAUtil.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestDerKeys\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

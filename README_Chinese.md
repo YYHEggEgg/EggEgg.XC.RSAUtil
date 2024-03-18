@@ -7,6 +7,8 @@ This package is **not the official version of GitHub Repository [stulzq/RSAUtil]
 # RSAUtil
 .NET Core RSA 算法使用帮助工具，支持数据加密，解密，签名和验证签名，支持 XML、PKCS1、PKCS8 三种密钥格式，支持这三种格式的密钥转换。
 
+此外，相比原版它还支持 `.der` 密钥。
+
 [![Latest version](https://img.shields.io/nuget/v/EggEgg.XC.RSAUtil.svg?style=flat-square)](https://www.nuget.org/packages/EggEgg.XC.RSAUtil/)
 
 
@@ -19,7 +21,7 @@ Install-Package EggEgg.XC.RSAUtil
 
 ### 开箱即用
 
-可使用 `RSAUtilBase.LoadRSAKey` 来快捷加载任何 XML、PKCS1、PKCS8 格式的私钥与公钥，自动检测格式、密钥位数等参数。私钥实例支持公钥的功能（公钥加密，验证签名）。
+可使用 `RSAUtilBase.LoadRSAKey(byte[])` 来快捷加载任何 XML、PKCS1、PKCS8、DER 格式的私钥与公钥，自动检测格式、密钥位数等参数。私钥实例支持公钥的功能（公钥加密，验证签名）。
 
 ### 生成密钥
 
@@ -42,7 +44,7 @@ var publicKey = key.publicKey;
 ```cs
 RsaKeyConvert.Format(key,
     new RsaKeyFeature { IsPrivate = true; Format = RsaKeyFormat.Xml; Padding = RsaKeyPadding.Xml }, 
-    new RsaKeyFeature { IsPrivate = true; Format = RsaKeyFormat.Pem; Padding = RsaKeyPadding.Pkcs1 });
+    new RsaKeyFeature { IsPrivate = true; Format = RsaKeyFormat.Der; Padding = RsaKeyPadding.Pkcs1 });
 
 RsaKeyConvert.Format(key,
     new RsaKeyFeature { IsPrivate = false; Format = RsaKeyFormat.Xml; Padding = RsaKeyPadding.Xml },

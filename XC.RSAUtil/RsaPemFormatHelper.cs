@@ -5,174 +5,123 @@ namespace XC.RSAUtil
 {
     public class RsaPemFormatHelper
     {
+        internal static readonly Dictionary<(RsaKeyPadding Padding, bool IsPrivate), (string Begin, string End)> PemFormatParas = new Dictionary<(RsaKeyPadding Padding, bool IsPrivate), (string Begin, string End)>()
+        {
+            { (RsaKeyPadding.Pkcs1, false), ("-----BEGIN RSA PUBLIC KEY-----", "-----END RSA PUBLIC KEY-----") },
+            { (RsaKeyPadding.Pkcs8, false), ("-----BEGIN PUBLIC KEY-----", "-----END PUBLIC KEY-----") },
+            { (RsaKeyPadding.Pkcs1, true), ("-----BEGIN RSA PRIVATE KEY-----", "-----END RSA PRIVATE KEY-----") },
+            { (RsaKeyPadding.Pkcs8, true), ("-----BEGIN PRIVATE KEY-----", "-----END PRIVATE KEY-----") },
+        };
+
+        /// <summary>
+        /// Format any PEM RSA key
+        /// </summary>
+        /// <returns>A string ensured to match PEM format</returns>
+        public static string PemRsaKeyFormat(string str, RsaKeyPadding targetPadding, bool isPrivate)
+        {
+            (string begin, string end) = PemFormatParas[(targetPadding, isPrivate)];
+            
+            if (str.StartsWith(begin))
+            {
+                return str;
+            }
+
+            List<string> res = new List<string>();
+            res.Add(begin);
+
+            int pos = 0;
+
+            while (pos < str.Length)
+            {
+                var count = str.Length - pos < 64 ? str.Length - pos : 64;
+                res.Add(str.Substring(pos, count));
+                pos += count;
+            }
+
+            res.Add($"{end}{Environment.NewLine}");
+            var resStr = string.Join(Environment.NewLine, res);
+            return resStr;
+        }
+
+        /// <summary>
+        /// Remove any PEM RSA key's begin and end
+        /// </summary>
+        /// <returns>A string ensured to match PEM format</returns>
+        public static string PemRsaKeyFormatRemove(string str, RsaKeyPadding targetPadding, bool isPrivate)
+        {
+            (string begin, string end) = PemFormatParas[(targetPadding, isPrivate)];
+            
+            if (!str.StartsWith(begin))
+            {
+                return str;
+            }
+            return str.Replace(begin, string.Empty).Replace(end, string.Empty)
+                .Replace(Environment.NewLine, string.Empty);
+        }
+
+
         /// <summary>
         /// Format Pkcs1 format private key
-        /// Author:Zhiqiang Li
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string Pkcs1PrivateKeyFormat(string str)
-        {
-            if (str.StartsWith("-----BEGIN RSA PRIVATE KEY-----"))
-            {
-                return str;
-            }
-
-            List<string> res = new List<string>();
-            res.Add($"-----BEGIN RSA PRIVATE KEY-----");
-
-            int pos = 0;
-
-            while (pos < str.Length)
-            {
-                var count = str.Length - pos < 64 ? str.Length - pos : 64;
-                res.Add(str.Substring(pos, count));
-                pos += count;
-            }
-
-            res.Add($"-----END RSA PRIVATE KEY-----{Environment.NewLine}");
-            var resStr = string.Join(Environment.NewLine, res);
-            return resStr;
-        }
-
-        /// <summary>
-        /// Remove the Pkcs1 format private key format
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static string Pkcs1PrivateKeyFormatRemove(string str)
-        {
-            if (!str.StartsWith("-----BEGIN RSA PRIVATE KEY-----"))
-            {
-                return str;
-            }
-            return str.Replace("-----BEGIN RSA PRIVATE KEY-----", "").Replace("-----END RSA PRIVATE KEY-----", "")
-                .Replace(Environment.NewLine, "");
-        }
-
-        /// <summary>
-        /// Format Pkcs8 format private key
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static string Pkcs8PrivateKeyFormat(string str)
-        {
-            if (str.StartsWith("-----BEGIN PRIVATE KEY-----"))
-            {
-                return str;
-            }
-            List<string> res = new List<string>();
-            res.Add($"-----BEGIN PRIVATE KEY-----");
-
-            int pos = 0;
-
-            while (pos < str.Length)
-            {
-                var count = str.Length - pos < 64 ? str.Length - pos : 64;
-                res.Add(str.Substring(pos, count));
-                pos += count;
-            }
-
-            res.Add($"-----END PRIVATE KEY-----{Environment.NewLine}");
-            var resStr = string.Join(Environment.NewLine, res);
-            return resStr;
-        }
+        public static string Pkcs1PrivateKeyFormat(string str) =>
+            PemRsaKeyFormat(str, RsaKeyPadding.Pkcs1, true);
 
         /// <summary>
         /// Remove the Pkcs8 format private key format
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string Pkcs8PrivateKeyFormatRemove(string str)
-        {
-            if (!str.StartsWith("-----BEGIN PRIVATE KEY-----"))
-            {
-                return str;
-            }
-            return str.Replace("-----BEGIN PRIVATE KEY-----", "").Replace("-----END PRIVATE KEY-----", "")
-                .Replace(Environment.NewLine, "");
-        }
+        public static string Pkcs8PrivateKeyFormatRemove(string str) =>
+            PemRsaKeyFormatRemove(str, RsaKeyPadding.Pkcs8, true);
 
         /// <summary>
-        /// Format pkcs8 public key
+        /// Format Pkcs8 format private key
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string Pkcs8PublicKeyFormat(string str)
-        {
-            if (str.StartsWith("-----BEGIN PUBLIC KEY-----"))
-            {
-                return str;
-            }
-            List<string> res = new List<string>();
-            res.Add($"-----BEGIN PUBLIC KEY-----");
-            int pos = 0;
-
-            while (pos < str.Length)
-            {
-                var count = str.Length - pos < 64 ? str.Length - pos : 64;
-                res.Add(str.Substring(pos, count));
-                pos += count;
-            }
-            res.Add($"-----END PUBLIC KEY-----{Environment.NewLine}");
-            var resStr = string.Join(Environment.NewLine, res);
-            return resStr;
-        }
+        public static string Pkcs8PrivateKeyFormat(string str) =>
+            PemRsaKeyFormat(str, RsaKeyPadding.Pkcs8, true);
 
         /// <summary>
-        /// Pkcs8 public key format removed
+        /// Remove the Pkcs1 format private key format
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string Pkcs8PublicKeyFormatRemove(string str)
-        {
-            if (!str.StartsWith("-----BEGIN PUBLIC KEY-----"))
-            {
-                return str;
-            }
-            return str.Replace("-----BEGIN PUBLIC KEY-----", "").Replace("-----END PUBLIC KEY-----", "")
-                .Replace(Environment.NewLine, "");
-        }
+        public static string Pkcs1PrivateKeyFormatRemove(string str) =>
+            PemRsaKeyFormatRemove(str, RsaKeyPadding.Pkcs1, true);
 
         /// <summary>
-        /// Format pkcs1 public key
+        /// Format Pkcs8 format public key
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string Pkcs1PublicKeyFormat(string str)
-        {
-            if (str.StartsWith("-----BEGIN RSA PUBLIC KEY-----"))
-            {
-                return str;
-            }
-            List<string> res = new List<string>();
-            res.Add($"-----BEGIN RSA PUBLIC KEY-----");
-            int pos = 0;
-
-            while (pos < str.Length)
-            {
-                var count = str.Length - pos < 64 ? str.Length - pos : 64;
-                res.Add(str.Substring(pos, count));
-                pos += count;
-            }
-            res.Add($"-----END RSA PUBLIC KEY-----{Environment.NewLine}");
-            var resStr = string.Join(Environment.NewLine, res);
-            return resStr;
-        }
+        public static string Pkcs8PublicKeyFormat(string str) =>
+            PemRsaKeyFormat(str, RsaKeyPadding.Pkcs8, false);
 
         /// <summary>
-        /// Pkcs1 public key format removed
+        /// Remove the Pkcs8 format public key format
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string Pkcs1PublicKeyFormatRemove(string str)
-        {
-            if (!str.StartsWith("-----BEGIN RSA PUBLIC KEY-----"))
-            {
-                return str;
-            }
-            return str.Replace("-----BEGIN RSA PUBLIC KEY-----", "").Replace("-----END RSA PUBLIC KEY-----", "")
-                .Replace(Environment.NewLine, "");
-        }
+        public static string Pkcs8PublicKeyFormatRemove(string str) =>
+            PemRsaKeyFormatRemove(str, RsaKeyPadding.Pkcs8, false);
+
+        /// <summary>
+        /// Format Pkcs1 format public key
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string Pkcs1PublicKeyFormat(string str) =>
+            PemRsaKeyFormat(str, RsaKeyPadding.Pkcs1, false);
+
+        /// <summary>
+        /// Remove the Pkcs1 format public key format
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string Pkcs1PublicKeyFormatRemove(string str) =>
+            PemRsaKeyFormatRemove(str, RsaKeyPadding.Pkcs1, false);
     }
 }

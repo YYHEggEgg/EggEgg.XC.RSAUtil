@@ -10,7 +10,7 @@ namespace XC.RSAUtil
     /// Author:Zhiqiang Li
     /// CreateDate:2018-1-5
     /// </summary>
-    public class RsaXmlUtil : RSAUtilBase
+    public class RsaXmlUtil : RSAPemUtilBase
     {
         /// <summary>
         /// The class initializer.
@@ -18,7 +18,7 @@ namespace XC.RSAUtil
         /// <param name="publicKey">The public key can be infered from private key.</param>
         /// <param name="privateKey">If not given, this instance won't support private key features.</param>
         /// <exception cref="ArgumentException">Neither <paramref name="publicKey"/> nor <paramref name="privateKey"/> has been given.</exception>
-        public RsaXmlUtil(string? privateKey = null, string? publicKey = null, int keySize = 2048)
+        public RsaXmlUtil(string? privateKey = null, string? publicKey = null, int keySize = 2048) : base(privateKey, publicKey)
         {
             if (string.IsNullOrEmpty(privateKey) && string.IsNullOrEmpty(publicKey))
             {

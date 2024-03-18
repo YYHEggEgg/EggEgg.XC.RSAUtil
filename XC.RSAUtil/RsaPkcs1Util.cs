@@ -14,7 +14,7 @@ namespace XC.RSAUtil
     /// RSA pkcs1 format key helper class
     /// Author:Zhiqiang Li
     /// </summary>
-    public class RsaPkcs1Util : RSAUtilBase
+    public class RsaPkcs1Util : RSAPemUtilBase
     {
         /// <summary>
         /// The class initializer.
@@ -22,7 +22,7 @@ namespace XC.RSAUtil
         /// <param name="publicKey">The public key can be infered from private key.</param>
         /// <param name="privateKey">If not given, this instance won't support private key features.</param>
         /// <exception cref="ArgumentException">Neither <paramref name="publicKey"/> nor <paramref name="privateKey"/> has been given.</exception>
-        public RsaPkcs1Util(string? privateKey = null, string? publicKey = null)
+        public RsaPkcs1Util(string? privateKey = null, string? publicKey = null) : base(privateKey, publicKey)
         {
             if (string.IsNullOrEmpty(privateKey) && string.IsNullOrEmpty(publicKey))
             {

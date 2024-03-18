@@ -1,6 +1,6 @@
 namespace YYHEggEgg.XC.RSAUtil.Tests;
 
-public class RSAUtilBase_LoadRSAKeyShould
+public partial class RSAUtilBase_LoadRSAKeyShould
 {
     [Theory]
     [InlineData(TestRSAKeys.Pkcs1PrivateKey_2)]
@@ -27,7 +27,7 @@ public class RSAUtilBase_LoadRSAKeyShould
     [InlineData(TestRSAKeys.XmlPublicKey_3)]
     [InlineData(TestRSAKeys.XmlPublicKey_4)]
     [InlineData(TestRSAKeys.XmlPublicKey_5)]
-    public void LoadRSAKey_ManyKeys(string rsakey)
+    public void LoadRSAKey_StringKey_ManyKeys(string rsakey)
     {
         var rsa = RSAUtilBase.LoadRSAKey(rsakey);
         Assert.Equal(2048, rsa.PublicRsa?.KeySize);

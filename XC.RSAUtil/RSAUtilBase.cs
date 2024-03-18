@@ -7,7 +7,7 @@ using System.Text;
 
 namespace XC.RSAUtil
 {
-    public abstract class RSAUtilBase : IDisposable
+    public abstract partial class RSAUtilBase : IDisposable
     {
         public RSA? PrivateRsa;
         public RSA? PublicRsa;
@@ -108,9 +108,6 @@ namespace XC.RSAUtil
             return res;
         }
 
-        protected abstract RSAParameters CreateRsapFromPrivateKey(string privateKey);
-        protected abstract RSAParameters CreateRsapFromPublicKey(string publicKey);
-
         public void Dispose()
         {
             PrivateRsa?.Dispose();
@@ -132,95 +129,5 @@ namespace XC.RSAUtil
                 throw new InvalidOperationException("private key can not be null");
             }
         }
-
-        /// <summary>
-        /// Load the rsa key as <see cref="RSAUtilBase"/>.
-        /// </summary>
-        /// <param name="rsaKey">The string rsa key, support public/private, PKCS1/PKCS8/Xml all.</param>
-        /// <returns></returns>
-        public static RSAUtilBase LoadRSAKey(string rsaKey)
-        {
-            var keyType = TreatRSAKeyType(rsaKey);
-            // PKCS8 Padding
-            if (keyType.Padding == RsaKeyPadding.Pkcs8 && !keyType.IsPrivate)
-                return new RsaPkcs8Util(publicKey: rsaKey);
-            else if (keyType.Padding == RsaKeyPadding.Pkcs8 && keyType.IsPrivate)
-                return new RsaPkcs8Util(privateKey: rsaKey);
-            // PKCS1 Padding
-            else if (keyType.Padding == RsaKeyPadding.Pkcs1 && !keyType.IsPrivate)
-                return new RsaPkcs1Util(publicKey: rsaKey);
-            else if (keyType.Padding == RsaKeyPadding.Pkcs1 && keyType.IsPrivate)
-                return new RsaPkcs1Util(privateKey: rsaKey);
-            // .NET XML Format
-            else if (keyType.Padding == RsaKeyPadding.Xml && !keyType.IsPrivate)
-                return new RsaXmlUtil(publicKey: rsaKey);
-            else if (keyType.Padding == RsaKeyPadding.Xml && keyType.IsPrivate)
-                return new RsaXmlUtil(privateKey: rsaKey);
-            else throw new ArgumentException("Invalid RSA Key!", nameof(rsaKey));
-        }
-
-        /// <summary>
-        /// Return a <see cref="RsaKeyFeature"/> object that represents the type of <paramref name="rsaKey"/>.
-        /// </summary>
-        public static RsaKeyFeature TreatRSAKeyType(string rsaKey)
-        {
-            // PKCS8 Padding
-            if (rsaKey.StartsWith("-----BEGIN PUBLIC KEY-----"))
-                return new RsaKeyFeature
-                {
-                    IsPrivate = false,
-                    Padding = RsaKeyPadding.Pkcs8,
-                    Format = RsaKeyFormat.Pem,
-                };
-            else if (rsaKey.StartsWith("-----BEGIN PRIVATE KEY-----"))
-                return new RsaKeyFeature
-                {
-                    IsPrivate = true,
-                    Padding = RsaKeyPadding.Pkcs8,
-                    Format = RsaKeyFormat.Pem,
-                };
-            // PKCS1 Padding
-            else if (rsaKey.StartsWith("-----BEGIN RSA PUBLIC KEY-----"))
-                return new RsaKeyFeature
-                {
-                    IsPrivate = false,
-                    Padding = RsaKeyPadding.Pkcs1,
-                    Format = RsaKeyFormat.Pem,
-                };
-            else if (rsaKey.StartsWith("-----BEGIN RSA PRIVATE KEY-----"))
-                return new RsaKeyFeature
-                {
-                    IsPrivate = true,
-                    Padding = RsaKeyPadding.Pkcs1,
-                    Format = RsaKeyFormat.Pem,
-                };
-            // .NET XML Format
-            else if (rsaKey.StartsWith("<RSAKeyValue>"))
-            {
-                if (rsaKey.Contains("<InverseQ>"))
-                    return new RsaKeyFeature
-                    {
-                        IsPrivate = true,
-                        Padding = RsaKeyPadding.Xml,
-                        Format = RsaKeyFormat.Xml,
-                    };
-                else
-                    return new RsaKeyFeature
-                    {
-                        IsPrivate = false,
-                        Padding = RsaKeyPadding.Xml,
-                        Format = RsaKeyFormat.Xml,
-                    };
-            }
-            else throw new ArgumentException("Invalid RSA Key!", nameof(rsaKey));
-        }
-    
-        /// <summary>
-        /// Calculate the length (bits) from a RSA key's Modulus Length.
-        /// </summary>
-        /// <param name="modulus"></param>
-        /// <returns></returns>
-        public static int CalculateKeyLength(byte[] modulus) =>
-            (int)Math.Pow(2, Math.Log(256, 2)) * 8;
     }
 }

@@ -7,6 +7,8 @@ This package is **not the official version of GitHub Repository [stulzq/RSAUtil]
 # RSAUtil
 .NET Core RSA algorithm helper tool, supports data encryption, decryption, signing, and signature verification. Supports three key formats: XML, PKCS1, and PKCS8. Supports key conversion for these three formats.
 
+Compared to the original version, this fork also supports `.der` keys.
+
 [![Latest version](https://img.shields.io/nuget/v/EggEgg.XC.RSAUtil.svg?style=flat-square)](https://www.nuget.org/packages/EggEgg.XC.RSAUtil/)
 
 ## Installation via NuGet
@@ -18,7 +20,7 @@ Install-Package EggEgg.XC.RSAUtil
 
 ### Ready to use
 
-You can use `RSAUtilBase.LoadRSAKey` to quickly load private and public keys in XML, PKCS1, and PKCS8 formats, and paramters like the format and the bits of the RSA key can be auto-detected. The private key instance supports the functionality of the public key (public key encryption, signature verification).
+You can use `RSAUtilBase.LoadRSAKey(byte[])` to quickly load private and public keys in XML, PKCS1, PKCS8 and DER formats, and paramters like the format and the bits of the RSA key can be auto-detected. The private key instance supports the functionality of the public key (public key encryption, signature verification).
 
 ### Generating keys
 
@@ -41,7 +43,7 @@ You can freely convert key formats using `RsaKeyConvert.Format()`. For example:
 ```cs
 RsaKeyConvert.Format(key,
     new RsaKeyFeature { IsPrivate = true; Format = RsaKeyFormat.Xml; Padding = RsaKeyPadding.Xml }, 
-    new RsaKeyFeature { IsPrivate = true; Format = RsaKeyFormat.Pem; Padding = RsaKeyPadding.Pkcs1 });
+    new RsaKeyFeature { IsPrivate = true; Format = RsaKeyFormat.Der; Padding = RsaKeyPadding.Pkcs1 });
 
 RsaKeyConvert.Format(key,
     new RsaKeyFeature { IsPrivate = false; Format = RsaKeyFormat.Xml; Padding = RsaKeyPadding.Xml },
