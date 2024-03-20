@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace XC.RSAUtil
 {
@@ -13,6 +14,9 @@ namespace XC.RSAUtil
             { (RsaKeyPadding.Pkcs8, true), ("-----BEGIN PRIVATE KEY-----", "-----END PRIVATE KEY-----") },
         };
 
+        private static Regex invisibleWorker = new Regex(@"\s+", RegexOptions.Compiled);
+        private static Regex base64Worker = new Regex("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$", RegexOptions.Compiled | RegexOptions.Singleline);
+
         /// <summary>
         /// Format any PEM RSA key
         /// </summary>
@@ -21,11 +25,7 @@ namespace XC.RSAUtil
         {
             (string begin, string end) = PemFormatParas[(targetPadding, isPrivate)];
             
-            if (str.StartsWith(begin))
-            {
-                return str;
-            }
-
+            str = PemRsaKeyFormatRemove(str, targetPadding, isPrivate);
             List<string> res = new List<string>();
             res.Add(begin);
 
@@ -51,12 +51,20 @@ namespace XC.RSAUtil
         {
             (string begin, string end) = PemFormatParas[(targetPadding, isPrivate)];
             
-            if (!str.StartsWith(begin))
+            str = str.Trim();
+            if (str.StartsWith(begin))
             {
-                return str;
+                str = str.Substring(begin.Length);
             }
-            return str.Replace(begin, string.Empty).Replace(end, string.Empty)
-                .Replace(Environment.NewLine, string.Empty);
+            if (str.EndsWith(end))
+            {
+                str = str.Substring(0, str.Length - end.Length);
+            }
+
+            str = invisibleWorker.Replace(str, "");
+            if (!base64Worker.IsMatch(str))
+                throw new ArgumentException("The input string is neither a valid base64 string nor a PEM format.");
+            return str;
         }
 
 

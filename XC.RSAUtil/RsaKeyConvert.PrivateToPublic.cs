@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
 using Org.BouncyCastle.Crypto;
@@ -32,14 +33,18 @@ namespace XC.RSAUtil
                 (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(
                     PrivateKeyInfoFactory.CreatePrivateKeyInfo(asymmetricCipherKeyPair.Private));
 
-            RsaKeyParameters rsaPublicKeyParameters = new RsaKeyParameters(false,
-                rsaPrivateCrtKeyParameters.Modulus, rsaPrivateCrtKeyParameters.PublicExponent);
+            RSAParameters rsaPublicKeyParameters = new RSAParameters
+            {
+                Modulus = rsaPrivateCrtKeyParameters.Modulus.ToByteArrayUnsigned(),
+                Exponent = rsaPrivateCrtKeyParameters.PublicExponent.ToByteArrayUnsigned(),
+            };
 
-            StringWriter sw = new StringWriter();
-            PemWriter pWrt = new PemWriter(sw);
-            pWrt.WriteObject(rsaPublicKeyParameters);
-            pWrt.Writer.Close();
-            return sw.ToString();
+            using (var rsa = new RSACryptoServiceProvider())
+            {
+                rsa.ImportParameters(rsaPublicKeyParameters);
+                var rsaKeyBin = rsa.ExportRSAPublicKey();
+                return RsaPemFormatHelper.Pkcs1PublicKeyFormat(Convert.ToBase64String(rsaKeyBin));
+            }
         }
 
         /// <summary>

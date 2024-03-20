@@ -144,6 +144,8 @@ namespace XC.RSAUtil
         public static byte[] Format(byte[] rsaKeyBin, RsaKeyFeature inputKeyType, RsaKeyFeature outputKeyType)
         {
             ValidateTransferRSAKeyTypes(inputKeyType, outputKeyType);
+            inputKeyType = inputKeyType.DeepClone();
+            outputKeyType = outputKeyType.DeepClone();
 
             string? inputRsaKey;
             switch (inputKeyType.Format)

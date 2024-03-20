@@ -158,4 +158,34 @@ public partial class RsaKeyConvert_FormatShould
     {
         Assert.Equal(expected.ReplaceLineEndings(), RsaKeyConvert.Format(input, XmlPublicKeyType, Pkcs8PublicPemKeyType));
     }
+
+    [Theory]
+    [InlineData(TestRSAKeys.Pkcs1PrivateKey_2, TestRSAKeys.Pkcs1PublicKey_2)]
+    [InlineData(TestRSAKeys.Pkcs1PrivateKey_3, TestRSAKeys.Pkcs1PublicKey_3)]
+    [InlineData(TestRSAKeys.Pkcs1PrivateKey_4, TestRSAKeys.Pkcs1PublicKey_4)]
+    [InlineData(TestRSAKeys.Pkcs1PrivateKey_5, TestRSAKeys.Pkcs1PublicKey_5)]
+    public void Format_StringKey_Pkcs1_PrivateToPublic(string input, string expected)
+    {
+        Assert.Equal(expected.ReplaceLineEndings(), RsaKeyConvert.Format(input, Pkcs1PrivatePemKeyType, Pkcs1PublicPemKeyType));
+    }
+
+    [Theory]
+    [InlineData(TestRSAKeys.Pkcs8PrivateKey_2, TestRSAKeys.Pkcs8PublicKey_2)]
+    [InlineData(TestRSAKeys.Pkcs8PrivateKey_3, TestRSAKeys.Pkcs8PublicKey_3)]
+    [InlineData(TestRSAKeys.Pkcs8PrivateKey_4, TestRSAKeys.Pkcs8PublicKey_4)]
+    [InlineData(TestRSAKeys.Pkcs8PrivateKey_5, TestRSAKeys.Pkcs8PublicKey_5)]
+    public void Format_StringKey_Pkcs8_PrivateToPublic(string input, string expected)
+    {
+        Assert.Equal(expected.ReplaceLineEndings(), RsaKeyConvert.Format(input, Pkcs8PrivatePemKeyType, Pkcs8PublicPemKeyType));
+    }
+
+    [Theory]
+    [InlineData(TestRSAKeys.XmlPrivateKey_2, TestRSAKeys.XmlPublicKey_2)]
+    [InlineData(TestRSAKeys.XmlPrivateKey_3, TestRSAKeys.XmlPublicKey_3)]
+    [InlineData(TestRSAKeys.XmlPrivateKey_4, TestRSAKeys.XmlPublicKey_4)]
+    [InlineData(TestRSAKeys.XmlPrivateKey_5, TestRSAKeys.XmlPublicKey_5)]
+    public void Format_StringKey_Xml_PrivateToPublic(string input, string expected)
+    {
+        Assert.Equal(expected.ReplaceLineEndings(), RsaKeyConvert.Format(input, XmlPrivateKeyType, XmlPublicKeyType));
+    }
 }

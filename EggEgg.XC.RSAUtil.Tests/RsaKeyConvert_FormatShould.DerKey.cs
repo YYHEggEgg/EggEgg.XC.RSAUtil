@@ -156,4 +156,24 @@ public partial class RsaKeyConvert_FormatShould
     {
         AssertSequenceEqual(GetKeyBinFromDerFile(expected), RsaKeyConvert.Format(GetKeyBinFromXml(input), XmlPublicKeyType, Pkcs8PublicDerKeyType));
     }
+
+    [Theory]
+    [InlineData("TestDerKeys/Pkcs1PrivateKey_2.der", "TestDerKeys/Pkcs1PublicKey_2.der")]
+    [InlineData("TestDerKeys/Pkcs1PrivateKey_3.der", "TestDerKeys/Pkcs1PublicKey_3.der")]
+    [InlineData("TestDerKeys/Pkcs1PrivateKey_4.der", "TestDerKeys/Pkcs1PublicKey_4.der")]
+    [InlineData("TestDerKeys/Pkcs1PrivateKey_5.der", "TestDerKeys/Pkcs1PublicKey_5.der")]
+    public void Format_DerKey_Pkcs1_PrivateToPublic(string input, string expected)
+    {
+        AssertSequenceEqual(GetKeyBinFromDerFile(expected), RsaKeyConvert.Format(GetKeyBinFromDerFile(input), Pkcs1PrivateDerKeyType, Pkcs1PublicDerKeyType));
+    }
+
+    [Theory]
+    [InlineData("TestDerKeys/Pkcs8PrivateKey_2.der", "TestDerKeys/Pkcs8PublicKey_2.der")]
+    [InlineData("TestDerKeys/Pkcs8PrivateKey_3.der", "TestDerKeys/Pkcs8PublicKey_3.der")]
+    [InlineData("TestDerKeys/Pkcs8PrivateKey_4.der", "TestDerKeys/Pkcs8PublicKey_4.der")]
+    [InlineData("TestDerKeys/Pkcs8PrivateKey_5.der", "TestDerKeys/Pkcs8PublicKey_5.der")]
+    public void Format_DerKey_Pkcs8_PrivateToPublic(string input, string expected)
+    {
+        AssertSequenceEqual(GetKeyBinFromDerFile(expected), RsaKeyConvert.Format(GetKeyBinFromDerFile(input), Pkcs8PrivateDerKeyType, Pkcs8PublicDerKeyType));
+    }
 }
