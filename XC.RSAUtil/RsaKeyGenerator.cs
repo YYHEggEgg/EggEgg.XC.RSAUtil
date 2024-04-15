@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Xml.Linq;
 using Org.BouncyCastle.Crypto;
@@ -14,7 +12,7 @@ namespace XC.RSAUtil
     ///  Rsa Key Generator
     /// Author:Zhiqiang Li
     /// </summary>
-    public class RsaKeyGenerator
+    public partial class RsaKeyGenerator
     {
         /// <summary>
         /// Generate XML Format RSA Key.
@@ -27,7 +25,7 @@ namespace XC.RSAUtil
             rsa.KeySize = keySize;
             var rsap = rsa.ExportParameters(true);
             KeyResult res = new KeyResult();
-            if (rsap.Modulus == null || rsap.Exponent == null || rsap.P == null || rsap.Q == null 
+            if (rsap.Modulus == null || rsap.Exponent == null || rsap.P == null || rsap.Q == null
                 || rsap.DP == null || rsap.DQ == null || rsap.InverseQ == null || rsap.D == null)
                 throw new Exception($"Generate key failed!");
 
@@ -57,7 +55,7 @@ namespace XC.RSAUtil
             privatElement.Add(pridq);
             privatElement.Add(priinverseQ);
             privatElement.Add(prid);
-            
+
             //添加私钥
             res.privateKey = privatElement.ToString();
 
@@ -109,9 +107,10 @@ namespace XC.RSAUtil
             pWrtpub.WriteObject(keyPair.Public);
             pWrtpub.Writer.Close();
             string publicKey = swpub.ToString();
+            publicKey = RsaKeyConvert.PublicKeyPkcs8ToPkcs1(publicKey);
             if (!format)
             {
-                publicKey = publicKey.Replace("-----BEGIN PUBLIC KEY-----", "").Replace("-----END PUBLIC KEY-----", "").Replace(Environment.NewLine, "");
+                publicKey = publicKey.Replace("-----BEGIN RSA PUBLIC KEY-----", "").Replace("-----END RSA PUBLIC KEY-----", "").Replace(Environment.NewLine, "");
             }
 
             res.publicKey = publicKey;

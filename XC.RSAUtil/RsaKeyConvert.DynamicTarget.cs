@@ -62,7 +62,7 @@ namespace XC.RSAUtil
                                 res = PublicKeyXmlToPkcs1(rsakey);
                                 break;
                             case RsaKeyPadding.Pkcs8:
-                                res = PublicKeyXmlToPkcs8(rsakey); 
+                                res = PublicKeyXmlToPkcs8(rsakey);
                                 break;
                         }
                     }
@@ -137,7 +137,6 @@ namespace XC.RSAUtil
                     break;
             }
 
-            
             return res ?? throw new InvalidOperationException("Unknown format condition: please report to EggEgg.XC.RSAUtil.");
         }
 

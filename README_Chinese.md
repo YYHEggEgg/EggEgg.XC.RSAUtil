@@ -1,4 +1,4 @@
-[EN](README.md) | 中文
+[EN](https://github.com/YYHEggEgg/EggEgg.XC.RSAUtil/tree/master/README.md) | 中文
 
 # Notice
 
@@ -23,16 +23,21 @@ Install-Package EggEgg.XC.RSAUtil
 
 ### 生成密钥
 
-> 使用“RsaKeyGenerator”类。返回的结果是为包含 `privateKey` 与 `publicKey` 两项的 `KeyResult`。
+> 使用 `RsaKeyGenerator` 类。返回的结果为包含 `KeySize`, `Format`, `Padding`, `PrivateKey` 与 `PublicKey` 的 `BinaryKeyResult`.
 
-格式：
+例如：
 
 ```csharp
-var keys = RsaKeyGenerator.XmlKey(2048); // XML 格式
-// var keys = RsaKeyGenerator.Pkcs1Key(2048); // PKCS1 格式
-// var keys = RsaKeyGenerator.Pkcs8Key(2048); // PKCS8 格式
-var privateKey = keys.privateKey;
-var publicKey = key.publicKey;
+var keys = RsaKeyGenerator.GetKey(RsaKeyFormat.Pem, RsaKeyPadding.Pkcs1, 2048);
+// or use RsaKeyFeature class
+// var keys = RsaKeyGenerator.GetKey(new RsaKeyFeature { Format = RsaKeyFormat.Der, Padding = RsaKeyPadding.Pkcs1 }, 2048);
+
+byte[] privateKey = keys.PrivateKey;
+byte[] publicKey = key.PublicKey;
+// You can directly use it also:
+var rsa = keys.GetRSAInstance();
+// Or save key and load next time:
+rsa = RSAUtilBase.LoadRSAKey(privateKey);
 ```
 
 ### RSA密钥转换
@@ -57,12 +62,12 @@ RsaKeyConvert.Format(key,
 
 ### 加密，解密，签名和验证签名
 
-> XML，Pkcs1，Pkcs8分别对应类：`RsaXmlUtil`，`RsaPkcs1Util`，`RsaPkcs8Util`。它们继承自抽象类`RSAUtilBase`
+使用 `RSAUtilBase.LoadRSAKey(byte[])` 加载密钥，然后就可以使用：
 
 - 加密：`RSAUtilBase.RsaEncrypt()`
 - 解密：`RSAUtilBase.RsaDecrypt()`
-- Sign：`RSAUtilBase.SignData()`
-- 验证：`RSAUtilBase.VerifyData()`
+- 签名：`RSAUtilBase.SignData()`
+- 验签：`RSAUtilBase.VerifyData()`
 
 ## 使用的开源组件
 

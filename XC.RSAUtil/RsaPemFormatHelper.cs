@@ -24,7 +24,7 @@ namespace XC.RSAUtil
         public static string PemRsaKeyFormat(string str, RsaKeyPadding targetPadding, bool isPrivate)
         {
             (string begin, string end) = PemFormatParas[(targetPadding, isPrivate)];
-            
+
             str = PemRsaKeyFormatRemove(str, targetPadding, isPrivate);
             List<string> res = new List<string>();
             res.Add(begin);
@@ -50,7 +50,7 @@ namespace XC.RSAUtil
         public static string PemRsaKeyFormatRemove(string str, RsaKeyPadding targetPadding, bool isPrivate)
         {
             (string begin, string end) = PemFormatParas[(targetPadding, isPrivate)];
-            
+
             str = str.Trim();
             if (str.StartsWith(begin))
             {

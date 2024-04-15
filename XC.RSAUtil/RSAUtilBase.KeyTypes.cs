@@ -82,7 +82,7 @@ namespace XC.RSAUtil
         {
             if (IsStringKey(rsaKeyBin))
                 return LoadRSAKey(Encoding.Default.GetString(rsaKeyBin));
-            else return LoadRSAKeyBinCore(rsaKeyBin); 
+            else return LoadRSAKeyBinCore(rsaKeyBin);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace XC.RSAUtil
             else if (RsaDerTrialUtil.TryParseAsPrivatePkcs8(rsaKeyBin, out res)) return res;
             else throw new ArgumentException("Invalid RSA Key!", nameof(rsaKeyBin));
         }
-    
+
         private static bool IsStringKey(byte[] rsaKeyBin)
         {
             try

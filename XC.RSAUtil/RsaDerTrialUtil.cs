@@ -46,7 +46,7 @@ namespace XC.RSAUtil
             try
             {
                 var rsaKey = RsaPemFormatHelper.Pkcs8PublicKeyFormat(Convert.ToBase64String(rsaKeyBin));
-                result = new RsaDerTrialUtil(new RsaPkcs8Util(publicKey: rsaKey), false, RsaKeyPadding.Pkcs1, RsaKeyFormat.Der);
+                result = new RsaDerTrialUtil(new RsaPkcs8Util(publicKey: rsaKey), false, RsaKeyPadding.Pkcs8, RsaKeyFormat.Der);
                 return true;
             }
             catch
@@ -76,7 +76,7 @@ namespace XC.RSAUtil
             try
             {
                 var rsaKey = RsaPemFormatHelper.Pkcs8PrivateKeyFormat(Convert.ToBase64String(rsaKeyBin));
-                result = new RsaDerTrialUtil(new RsaPkcs8Util(privateKey: rsaKey), true, RsaKeyPadding.Pkcs1, RsaKeyFormat.Der);
+                result = new RsaDerTrialUtil(new RsaPkcs8Util(privateKey: rsaKey), true, RsaKeyPadding.Pkcs8, RsaKeyFormat.Der);
                 return true;
             }
             catch

@@ -1,8 +1,8 @@
-EN | [中文](README_Chinese.md)
+EN | [中文](https://github.com/YYHEggEgg/EggEgg.XC.RSAUtil/tree/master/README_Chinese.md)
 
 # Notice
 
-This package is **not the official version of GitHub Repository [stulzq/RSAUtil](https://github.com/stulzq/RSAUtil)** but a custom modified version. Please go to [NuGet XC.RSAUtil](https://www.nuget.org/packages/XC.RSAUtil) for the official one.
+This package is **not the official version of GitHub Repository [stulzq/RSAUtil](https://github.com/stulzq/RSAUtil)** but a custom fork. Please go to [NuGet XC.RSAUtil](https://www.nuget.org/packages/XC.RSAUtil) for the official one.
 
 # RSAUtil
 A .NET Core RSA tool that provides the ability of data encryption, decryption, signing and verifying signature. It supports using and converting RSA keys of 4 key formats, namely: xml, pkcs1, pkcs8, der.
@@ -22,16 +22,21 @@ You can use `RSAUtilBase.LoadRSAKey(byte[])` to quickly load private and public 
 
 ### Generating keys
 
-> Use the "RsaKeyGenerator" class. The result returned is a `KeyResult` containing `privateKey` and `publicKey`.
+> Use the "RsaKeyGenerator" class. The result returned is a `BinaryKeyResult` containing `KeySize`, `Format`, `Padding`, `PrivateKey` and `PublicKey`.
 
-Format:
+Like this:
 
 ```csharp
-var keys = RsaKeyGenerator.XmlKey(2048); // XML format
-// var keys = RsaKeyGenerator.Pkcs1Key(2048); // PKCS1 format
-// var keys = RsaKeyGenerator.Pkcs8Key(2048); // PKCS8 format
-var privateKey = keys.privateKey;
-var publicKey = key.publicKey;
+var keys = RsaKeyGenerator.GetKey(RsaKeyFormat.Pem, RsaKeyPadding.Pkcs1, 2048);
+// or use RsaKeyFeature class
+// var keys = RsaKeyGenerator.GetKey(new RsaKeyFeature { Format = RsaKeyFormat.Der, Padding = RsaKeyPadding.Pkcs1 }, 2048);
+
+byte[] privateKey = keys.PrivateKey;
+byte[] publicKey = key.PublicKey;
+// You can directly use it also:
+var rsa = keys.GetRSAInstance();
+// Or save key and load next time:
+rsa = RSAUtilBase.LoadRSAKey(privateKey);
 ```
 
 ### RSA key conversion
@@ -56,7 +61,7 @@ Other hardcoded conversion methods can also be used under the `RsaKeyConvert` cl
 
 ### Encryption, decryption, signing, and signature verification
 
-> XML, Pkcs1, and Pkcs8 correspond to the classes: `RsaXmlUtil`, `RsaPkcs1Util`, `RsaPkcs8Util`. They inherit from the abstract class `RSAUtilBase`.
+Load any key via `RSAUtilBase.LoadRSAKey(byte[])`, then:
 
 - Encryption: `RSAUtilBase.RsaEncrypt()`
 - Decryption: `RSAUtilBase.RsaDecrypt()`
