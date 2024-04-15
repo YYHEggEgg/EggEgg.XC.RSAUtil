@@ -125,6 +125,6 @@ namespace XC.RSAUtil
         /// <param name="modulus"></param>
         /// <returns></returns>
         public static int CalculateKeyLength(byte[] modulus) =>
-            (int)Math.Pow(2, Math.Log(256, 2)) * 8;
+            (int)Math.Pow(2, Math.Log(modulus.Length, 2)) * 8;
     }
 }

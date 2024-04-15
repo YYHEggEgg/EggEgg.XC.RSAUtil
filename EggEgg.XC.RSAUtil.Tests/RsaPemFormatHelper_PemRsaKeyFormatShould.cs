@@ -9,7 +9,7 @@ public partial class RsaPemFormatHelper_PemRsaKeyFormatShould
     [InlineData(TestRSAKeys.Pkcs1PrivateKey_5)]
     public void PemRsaKeyFormat_Pkcs1Private(string pemKey)
     {
-        Assert.Equal(pemKey, RsaPemFormatHelper.PemRsaKeyFormat(pemKey, RsaKeyPadding.Pkcs1, true));
+        Assert.Equal(pemKey.ReplaceLineEndings(), RsaPemFormatHelper.PemRsaKeyFormat(pemKey, RsaKeyPadding.Pkcs1, true));
     }
 
     [Theory]
@@ -19,7 +19,7 @@ public partial class RsaPemFormatHelper_PemRsaKeyFormatShould
     [InlineData(TestRSAKeys.Pkcs1PublicKey_5)]
     public void PemRsaKeyFormat_Pkcs1Public(string pemKey)
     {
-        Assert.Equal(pemKey, RsaPemFormatHelper.PemRsaKeyFormat(pemKey, RsaKeyPadding.Pkcs1, false));
+        Assert.Equal(pemKey.ReplaceLineEndings(), RsaPemFormatHelper.PemRsaKeyFormat(pemKey, RsaKeyPadding.Pkcs1, false));
     }
 
     [Theory]
@@ -29,7 +29,7 @@ public partial class RsaPemFormatHelper_PemRsaKeyFormatShould
     [InlineData(TestRSAKeys.Pkcs8PrivateKey_5)]
     public void PemRsaKeyFormat_Pkcs8Private(string pemKey)
     {
-        Assert.Equal(pemKey, RsaPemFormatHelper.PemRsaKeyFormat(pemKey, RsaKeyPadding.Pkcs8, true));
+        Assert.Equal(pemKey.ReplaceLineEndings(), RsaPemFormatHelper.PemRsaKeyFormat(pemKey, RsaKeyPadding.Pkcs8, true));
     }
 
     [Theory]
@@ -39,6 +39,6 @@ public partial class RsaPemFormatHelper_PemRsaKeyFormatShould
     [InlineData(TestRSAKeys.Pkcs8PublicKey_5)]
     public void PemRsaKeyFormat_Pkcs8Public(string pemKey)
     {
-        Assert.Equal(pemKey, RsaPemFormatHelper.PemRsaKeyFormat(pemKey, RsaKeyPadding.Pkcs8, false));
+        Assert.Equal(pemKey.ReplaceLineEndings(), RsaPemFormatHelper.PemRsaKeyFormat(pemKey, RsaKeyPadding.Pkcs8, false));
     }
 }

@@ -30,7 +30,7 @@ public partial class RsaKeyConvert_FormatShould
     private byte[] GetKeyBinFromDerFile(string filePath) =>
         File.ReadAllBytes(filePath);
     private byte[] GetKeyBinFromXml(string xmlKey) =>
-        Encoding.UTF8.GetBytes(xmlKey);
+        Encoding.UTF8.GetBytes(xmlKey.ReplaceLineEndings());
     private void AssertSequenceEqual(byte[] expected, byte[] input) =>
         Assert.Equal(expected, input);
     private void AssertSequenceEqual(string expected, byte[] input) =>
