@@ -16,8 +16,6 @@ Install-Package EggEgg.XC.RSAUtil
 
 ## Documentation
 
-Here is the English translation of the provided text:
-
 ### What are the special features of this fork?
 
 - The `RSAUtilBase.LoadRSAKey(byte[])` method can quickly load any supported format of private and public keys, automatically detecting the format, key size, and other parameters, so you don't need to worry about the underlying details of RSA operations.
