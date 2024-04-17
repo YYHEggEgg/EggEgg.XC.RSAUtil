@@ -81,7 +81,9 @@ namespace XC.RSAUtil
         /// <param name="keySize">Key Size.Unit: bits</param>
         /// <param name="format">Whether the return is standard pem file format. If false, the method will return the PEM base64 string.</param>
         /// <returns></returns>
-        public static KeyResult Pkcs1Key(int keySize, bool format = true)
+        public static KeyResult Pkcs1Key(int keySize, bool format = true) => PemKeyGenAttempt(RsaKeyPadding.Pkcs1, keySize, format);
+
+        private static KeyResult Pkcs1KeyCore(int keySize)
         {
             KeyResult res = new KeyResult();
 
@@ -93,14 +95,7 @@ namespace XC.RSAUtil
             PemWriter pWrt = new PemWriter(sw);
             pWrt.WriteObject(keyPair.Private);
             pWrt.Writer.Close();
-            var privateKey = sw.ToString();
-
-            if (!format)
-            {
-                privateKey = privateKey.Replace("-----BEGIN RSA PRIVATE KEY-----", "").Replace("-----END RSA PRIVATE KEY-----", "").Replace(Environment.NewLine, "");
-            }
-
-            res.privateKey = privateKey;
+            res.privateKey = sw.ToString();
 
             StringWriter swpub = new StringWriter();
             PemWriter pWrtpub = new PemWriter(swpub);
@@ -108,11 +103,6 @@ namespace XC.RSAUtil
             pWrtpub.Writer.Close();
             string publicKey = swpub.ToString();
             publicKey = RsaKeyConvert.PublicKeyPkcs8ToPkcs1(publicKey);
-            if (!format)
-            {
-                publicKey = publicKey.Replace("-----BEGIN RSA PUBLIC KEY-----", "").Replace("-----END RSA PUBLIC KEY-----", "").Replace(Environment.NewLine, "");
-            }
-
             res.publicKey = publicKey;
 
             return res;
@@ -124,7 +114,9 @@ namespace XC.RSAUtil
         /// <param name="keySize">Key Size.Unit: bits</param>
         /// <param name="format">Whether the return is standard pem file format. If false, the method will return the PEM base64 string.</param>
         /// <returns></returns>
-        public static KeyResult Pkcs8Key(int keySize, bool format = true)
+        public static KeyResult Pkcs8Key(int keySize, bool format = true) => PemKeyGenAttempt(RsaKeyPadding.Pkcs8, keySize, format);
+
+        private static KeyResult Pkcs8KeyCore(int keySize)
         {
             KeyResult res = new KeyResult();
 
@@ -137,26 +129,13 @@ namespace XC.RSAUtil
             Pkcs8Generator pkcs8 = new Pkcs8Generator(keyPair.Private);
             pWrtpri.WriteObject(pkcs8);
             pWrtpri.Writer.Close();
-            string privateKey = swpri.ToString();
-
-            if (!format)
-            {
-                privateKey = privateKey.Replace("-----BEGIN PRIVATE KEY-----", "").Replace("-----END PRIVATE KEY-----", "").Replace(Environment.NewLine, "");
-            }
-
-            res.privateKey = privateKey;
+            res.privateKey = swpri.ToString();
 
             StringWriter swpub = new StringWriter();
             PemWriter pWrtpub = new PemWriter(swpub);
             pWrtpub.WriteObject(keyPair.Public);
             pWrtpub.Writer.Close();
-            string publicKey = swpub.ToString();
-            if (!format)
-            {
-                publicKey = publicKey.Replace("-----BEGIN PUBLIC KEY-----", "").Replace("-----END PUBLIC KEY-----", "").Replace(Environment.NewLine, "");
-            }
-
-            res.publicKey = publicKey;
+            res.publicKey = swpub.ToString();
 
             return res;
         }

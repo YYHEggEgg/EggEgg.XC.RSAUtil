@@ -47,15 +47,11 @@ namespace XC.RSAUtil
             };
         }
 
-        private static KeyResult GetStringKeyCore(RsaKeyFeature keyType, int keySize)
+        private static KeyResult GetStringKeyCore(RsaKeyFeature keyType, int keySize, bool format = true)
         {
             if (keyType.Format == RsaKeyFormat.Xml)
                 return XmlKey(keySize);
-            else if (keyType.Padding == RsaKeyPadding.Pkcs1)
-                return Pkcs1Key(keySize);
-            else if (keyType.Padding == RsaKeyPadding.Pkcs8)
-                return Pkcs8Key(keySize);
-            else throw new NotImplementedException("The generating of this key type is not supported yet.");
+            else return PemKeyGenAttempt(keyType.Padding, keySize, format);
         }
 
         public static BinaryKeyResult GetKey(RsaKeyFormat format, RsaKeyPadding padding, int keySize) => GetKey(new RsaKeyFeature
