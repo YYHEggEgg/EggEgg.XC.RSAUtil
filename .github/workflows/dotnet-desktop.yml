@@ -44,6 +44,6 @@ jobs:
 
     # Build
     - name: Build
-      run: dotnet build --configuration $env:Configuration $env:SOLUTION_FILE_PATH
+      run: dotnet build --configuration ${{env.Configuration}} ${{env.SOLUTION_FILE_PATH}}
       env:
         Configuration: ${{ matrix.configuration }}
