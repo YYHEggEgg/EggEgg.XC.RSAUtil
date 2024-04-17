@@ -124,7 +124,11 @@ namespace XC.RSAUtil
         /// </summary>
         /// <param name="modulus"></param>
         /// <returns></returns>
-        public static int CalculateKeyLength(byte[] modulus) =>
-            (int)Math.Pow(2, Math.Log(modulus.Length, 2)) * 8;
+        public static int CalculateKeyLength(byte[]? modulus)
+        {
+            if (modulus == null)
+                throw new ArgumentNullException(nameof(modulus), "The RSA Key should have a valid modulus.");
+            return (int)Math.Pow(2, Math.Log(modulus.Length, 2)) * 8;
+        }
     }
 }

@@ -5,7 +5,7 @@ EN | [中文](https://github.com/YYHEggEgg/EggEgg.XC.RSAUtil/tree/master/README_
 This package is **not the official version of GitHub Repository [stulzq/RSAUtil](https://github.com/stulzq/RSAUtil)** but a custom fork. Please go to [NuGet XC.RSAUtil](https://www.nuget.org/packages/XC.RSAUtil) for the official one.
 
 # RSAUtil
-A .NET Core RSA tool that provides the ability of data encryption, decryption, signing and verifying signature. It supports using and converting RSA keys of 4 key formats, namely: xml, pkcs1, pkcs8, der.
+A .NET Core RSA tool that provides the ability of data encryption, decryption, signing and verifying signature. It supports using and converting RSA keys of formats, namely: `.xml`, `.pem`, `.der`.
 
 [![Latest version](https://img.shields.io/nuget/v/EggEgg.XC.RSAUtil.svg?style=flat-square)](https://www.nuget.org/packages/EggEgg.XC.RSAUtil/)
 
@@ -16,9 +16,15 @@ Install-Package EggEgg.XC.RSAUtil
 
 ## Documentation
 
-### Ready to use
+Here is the English translation of the provided text:
 
-You can use `RSAUtilBase.LoadRSAKey(byte[])` to quickly load private and public keys in XML, PKCS1, PKCS8 and DER formats, and paramters like the format and the bits of the RSA key can be auto-detected. The private key instance supports the functionality of the public key (public key encryption, signature verification).
+### What are the special features of this fork?
+
+- The `RSAUtilBase.LoadRSAKey(byte[])` method can quickly load any supported format of private and public keys, automatically detecting the format, key size, and other parameters, so you don't need to worry about the underlying details of RSA operations.
+- Added comprehensive support for PKCS#1 RSA public keys.
+• Supports the `.der` binary key format.
+- Together with the `RsaKeyFeature` class and the `RSAUtilBase.TreatRSAKeyType(byte[])` method, compared to the original implementation's hard-coded approach, you can more flexibly handle RSA key operations.
+- Added unit tests to ensure the correctness of the package's behavior.
 
 ### Generating keys
 

@@ -5,7 +5,7 @@
 This package is **not the official version of GitHub Repository [stulzq/RSAUtil](https://github.com/stulzq/RSAUtil)** but a custom modified version. Please go to [NuGet XC.RSAUtil](https://www.nuget.org/packages/XC.RSAUtil) for the official one.
 
 # RSAUtil
-.NET Core RSA 工具，支持数据加密，解密，签名和验证签名，支持 XML、PKCS1、PKCS8、DER 4 种密钥格式，支持这 4 种格式的密钥转换。
+.NET Core RSA 工具，支持数据加密，解密，签名和验签，支持 `.xml`、`.pem`、`.der` 密钥格式，支持这些格式的密钥转换。
 
 [![Latest version](https://img.shields.io/nuget/v/EggEgg.XC.RSAUtil.svg?style=flat-square)](https://www.nuget.org/packages/EggEgg.XC.RSAUtil/)
 
@@ -17,9 +17,13 @@ Install-Package EggEgg.XC.RSAUtil
 
 ## 文档
 
-### 开箱即用
+### 本 fork 有什么特别之处？
 
-可使用 `RSAUtilBase.LoadRSAKey(byte[])` 来快捷加载任何 XML、PKCS1、PKCS8、DER 格式的私钥与公钥，自动检测格式、密钥位数等参数。私钥实例支持公钥的功能（公钥加密，验证签名）。
+- 开箱即用的 `RSAUtilBase.LoadRSAKey(byte[])` 可快捷加载任何支持格式的私钥与公钥，自动检测格式、密钥位数等参数，让您可以不必关心下层 RSA 操作的任何细节；
+- 添加了对于 PKCS#1 RSA 公钥的全面支持；
+- 支持 `.der` 二进制密钥格式；
+- 配合 `RsaKeyFeature` 类型与 `RSAUtilBase.TreatRSAKeyType(byte[])`，相比原实现的硬编码，可以更灵活地处理的 RSA 密钥操作；
+- 添加了单元测试保证包行为的正确性。
 
 ### 生成密钥
 
