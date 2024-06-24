@@ -18,9 +18,9 @@ Install-Package EggEgg.XC.RSAUtil
 
 ### What are the special features of this fork?
 
-- The `RSAUtilBase.LoadRSAKey(byte[])` method can quickly load any supported format of private and public keys, automatically detecting the format, key size, and other parameters, so you don't need to worry about the underlying details of RSA operations.
-- Added comprehensive support for PKCS#1 RSA public keys.
-• Supports the `.der` binary key format.
+- The `RSAUtilBase.LoadRSAKey(byte[])` method can easily load any supported format of private and public keys, automatically detecting the format, key size, and other parameters, so you don't need to worry about the underlying details of RSA operations.
+- (compared to the original version) Added comprehensive support for PKCS#1 RSA public keys.
+- Supports the `.der` binary key format.
 - Together with the `RsaKeyFeature` class and the `RSAUtilBase.TreatRSAKeyType(byte[])` method, compared to the original implementation's hard-coded approach, you can more flexibly handle RSA key operations.
 - Added unit tests to ensure the correctness of the package's behavior.
 

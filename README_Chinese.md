@@ -20,7 +20,7 @@ Install-Package EggEgg.XC.RSAUtil
 ### 本 fork 有什么特别之处？
 
 - 开箱即用的 `RSAUtilBase.LoadRSAKey(byte[])` 可快捷加载任何支持格式的私钥与公钥，自动检测格式、密钥位数等参数，让您可以不必关心下层 RSA 操作的任何细节；
-- 添加了对于 PKCS#1 RSA 公钥的全面支持；
+- （对比原版）添加了对于 PKCS#1 RSA 公钥的全面支持；
 - 支持 `.der` 二进制密钥格式；
 - 配合 `RsaKeyFeature` 类型与 `RSAUtilBase.TreatRSAKeyType(byte[])`，相比原实现的硬编码，可以更灵活地处理的 RSA 密钥操作；
 - 添加了单元测试保证包行为的正确性。
@@ -75,4 +75,4 @@ RsaKeyConvert.Format(key,
 
 ## 使用的开源组件
 
- [bc-csharp](https://github.com/onovotny/bc-csharp "bc-csharp") - onovotny
+[bc-csharp](https://github.com/onovotny/bc-csharp "bc-csharp") - onovotny
