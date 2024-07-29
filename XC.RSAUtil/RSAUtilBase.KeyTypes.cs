@@ -130,5 +130,19 @@ namespace XC.RSAUtil
                 throw new ArgumentNullException(nameof(modulus), "The RSA Key should have a valid modulus.");
             return (int)Math.Pow(2, Math.Log(modulus.Length, 2)) * 8;
         }
+
+        public byte[] FormatPublicKey(RsaKeyFeature outputKeyType)
+        {
+            AssertPubKeyNotNull();
+            var exportedKey = PublicRsa!.ExportRSAPublicKey();
+            return RsaKeyConvert.Format(exportedKey, outputKeyType);
+        }
+
+        public byte[] FormatPrivateKey(RsaKeyFeature outputKeyType)
+        {
+            AssertPriKeyNotNull();
+            var exportedKey = PrivateRsa!.ExportRSAPrivateKey();
+            return RsaKeyConvert.Format(exportedKey, outputKeyType);
+        }
     }
 }

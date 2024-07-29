@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace XC.RSAUtil
 {
     public enum RsaKeyPadding
@@ -16,7 +19,7 @@ namespace XC.RSAUtil
         Der,
     }
 
-    public class RsaKeyFeature
+    public class RsaKeyFeature : IEquatable<RsaKeyFeature?>
     {
         public bool IsPrivate;
         public RsaKeyPadding Padding;
@@ -28,5 +31,34 @@ namespace XC.RSAUtil
             Padding = Padding,
             Format = Format,
         };
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as RsaKeyFeature);
+        }
+
+        public bool Equals(RsaKeyFeature? other)
+        {
+            return !(other is null) &&
+                   IsPrivate == other.IsPrivate &&
+                   Padding == other.Padding &&
+                   Format == other.Format;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(IsPrivate, Padding, Format);
+        }
+
+        public static bool operator ==(RsaKeyFeature? left, RsaKeyFeature? right)
+        {
+            if (left is null) return right is null;
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(RsaKeyFeature? left, RsaKeyFeature? right)
+        {
+            return !(left == right);
+        }
     }
 }

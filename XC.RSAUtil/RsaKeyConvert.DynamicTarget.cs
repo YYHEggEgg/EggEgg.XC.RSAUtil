@@ -17,17 +17,20 @@ namespace XC.RSAUtil
 
             if (inputKeyType.IsPrivate == outputKeyType.IsPrivate &&
                 inputKeyType.Padding == outputKeyType.Padding &&
-                inputKeyType.Format == outputKeyType.Format)            {
-                throw new ArgumentException($"Input and output key cannot be the same padding and format when input and output are both private/public keys.");
+                inputKeyType.Format == outputKeyType.Format)
+            {
+                throw new KeyConvertSourceTargetEqualException();
             }
         }
 
         /// <summary>
         /// Select convert type yourself.
         /// </summary>
-        public static string Format(string rsakey, RsaKeyFeature inputKeyType, RsaKeyFeature outputKeyType)
+        public static string Format(string rsakey, RsaKeyFeature outputKeyType)
         {
-            ValidateTransferRSAKeyTypes(inputKeyType, outputKeyType);
+            var inputKeyType = RSAUtilBase.TreatRSAKeyType(rsakey);
+            try { ValidateTransferRSAKeyTypes(inputKeyType, outputKeyType); }
+            catch (KeyConvertSourceTargetEqualException) { return rsakey; }
 
             string? res = null;
 
@@ -80,7 +83,7 @@ namespace XC.RSAUtil
                             case RsaKeyPadding.Pkcs8:
                                 res = PrivateKeyPkcs1ToPkcs8(rsakey);
                                 if (!outputKeyType.IsPrivate)
-                                    res = PrivateKeyPkcs1ToPublic(res);
+                                    res = PrivateKeyPkcs8ToPublic(res);
                                 break;
                             case RsaKeyPadding.Pkcs1:
                                 if (!outputKeyType.IsPrivate)
@@ -140,10 +143,11 @@ namespace XC.RSAUtil
             return res ?? throw new InvalidOperationException("Unknown format condition: please report to EggEgg.XC.RSAUtil.");
         }
 
-        public static byte[] Format(byte[] rsaKeyBin, RsaKeyFeature inputKeyType, RsaKeyFeature outputKeyType)
+        public static byte[] Format(byte[] rsaKeyBin, RsaKeyFeature outputKeyType)
         {
-            ValidateTransferRSAKeyTypes(inputKeyType, outputKeyType);
-            inputKeyType = inputKeyType.DeepClone();
+            var inputKeyType = RSAUtilBase.TreatRSAKeyType(rsaKeyBin);
+            try { ValidateTransferRSAKeyTypes(inputKeyType, outputKeyType); }
+            catch (KeyConvertSourceTargetEqualException) { return rsaKeyBin; }
             outputKeyType = outputKeyType.DeepClone();
 
             string? inputRsaKey;
@@ -165,7 +169,7 @@ namespace XC.RSAUtil
             if (outputKeyType.Format == RsaKeyFormat.Der)
                 outputKeyType.Format = RsaKeyFormat.Pem;
 
-            var outputRsaKey = Format(inputRsaKey, inputKeyType, outputKeyType);
+            var outputRsaKey = Format(inputRsaKey, outputKeyType);
             if (outputFormat == RsaKeyFormat.Der)
             {
                 return Convert.FromBase64String(RsaPemFormatHelper.PemRsaKeyFormatRemove(outputRsaKey, outputKeyType.Padding, outputKeyType.IsPrivate));
@@ -174,6 +178,22 @@ namespace XC.RSAUtil
             {
                 return Encoding.UTF8.GetBytes(outputRsaKey);
             }
+        }
+
+        [Obsolete("Providing param 'inputKeyType' is useless. Use Format(byte[], RsaKeyFeature) to automatically judge input key type.")]
+        public static byte[] Format(byte[] rsaKeyBin, RsaKeyFeature inputKeyType, RsaKeyFeature outputKeyType)
+        {
+            if (inputKeyType != RSAUtilBase.TreatRSAKeyType(rsaKeyBin))
+                throw new ArgumentException("Provided inputKeyType does not equal to identified result.", nameof(inputKeyType));
+            return Format(rsaKeyBin, outputKeyType);
+        }
+
+        [Obsolete("Providing param 'inputKeyType' is useless. Use Format(string, RsaKeyFeature) to automatically judge input key type.")]
+        public static string Format(string rsakey, RsaKeyFeature inputKeyType, RsaKeyFeature outputKeyType)
+        {
+            if (inputKeyType != RSAUtilBase.TreatRSAKeyType(rsakey))
+                throw new ArgumentException("Provided inputKeyType does not equal to identified result.", nameof(inputKeyType));
+            return Format(rsakey, outputKeyType);
         }
     }
 

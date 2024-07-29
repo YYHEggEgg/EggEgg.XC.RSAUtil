@@ -50,19 +50,23 @@ rsa = RSAUtilBase.LoadRSAKey(privateKey);
 
 ```cs
 RsaKeyConvert.Format(key,
-    new RsaKeyFeature { IsPrivate = true; Format = RsaKeyFormat.Xml; Padding = RsaKeyPadding.Xml }, 
     new RsaKeyFeature { IsPrivate = true; Format = RsaKeyFormat.Der; Padding = RsaKeyPadding.Pkcs1 });
 
 RsaKeyConvert.Format(key,
-    new RsaKeyFeature { IsPrivate = false; Format = RsaKeyFormat.Xml; Padding = RsaKeyPadding.Xml },
     new RsaKeyFeature { IsPrivate = false; Format = RsaKeyFormat.Pem; Padding = RsaKeyPadding.Pkcs1 });
 
 RsaKeyConvert.Format(key, 
-    new RsaKeyFeature { IsPrivate = true; Format = RsaKeyFormat.Pem; Padding = RsaKeyPadding.Pkcs1 },
     new RsaKeyFeatire { IsPrivate = false; Format = RsaKeyFormat.Pem; Padding = RsaKeyPadding.Pkcs8 });
 ```
 
-也可使用 `RsaKeyConvert` 类下其他硬编码转化格式的方法。
+您也可以使用 `RSAUtilBase` 的实例方法 `FormatPublicKey` 或 `FormatPrivateKey` 来导出任意 RSA 实例的密钥，以任何您需求的格式。
+
+```cs
+var rsa = RsaKeyGenerator.GetKey(RsaKeyFormat.Pem, RsaKeyPadding.Pkcs1, 2048).GetRSAInstance();
+rsa.FormatPublicKey(new RsaKeyFeature { IsPrivate = false; Format = RsaKeyFormat.Xml; Padding = RsaKeyPadding.Xml });
+rsa.FormatPrivateKey(new RsaKeyFeatire { IsPrivate = false; Format = RsaKeyFormat.Pem; Padding = RsaKeyPadding.Pkcs8 });
+rsa.FormatPrivateKey(new RsaKeyFeature { IsPrivate = true; Format = RsaKeyFormat.Der; Padding = RsaKeyPadding.Pkcs1 });
+```
 
 ### 加密，解密，签名和验证签名
 

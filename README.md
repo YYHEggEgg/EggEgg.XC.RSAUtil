@@ -49,19 +49,23 @@ You can freely convert key formats using `RsaKeyConvert.Format()`. For example:
 
 ```cs
 RsaKeyConvert.Format(key,
-    new RsaKeyFeature { IsPrivate = true; Format = RsaKeyFormat.Xml; Padding = RsaKeyPadding.Xml }, 
     new RsaKeyFeature { IsPrivate = true; Format = RsaKeyFormat.Der; Padding = RsaKeyPadding.Pkcs1 });
 
 RsaKeyConvert.Format(key,
-    new RsaKeyFeature { IsPrivate = false; Format = RsaKeyFormat.Xml; Padding = RsaKeyPadding.Xml },
     new RsaKeyFeature { IsPrivate = false; Format = RsaKeyFormat.Pem; Padding = RsaKeyPadding.Pkcs1 });
 
-RsaKeyConvert.Format(key, 
-    new RsaKeyFeature { IsPrivate = true; Format = RsaKeyFormat.Pem; Padding = RsaKeyPadding.Pkcs1 },
+RsaKeyConvert.Format(key,
     new RsaKeyFeatire { IsPrivate = false; Format = RsaKeyFormat.Pem; Padding = RsaKeyPadding.Pkcs8 });
 ```
 
-Other hardcoded conversion methods can also be used under the `RsaKeyConvert` class.
+You can also use `RSAUtilBase`'s instance method `FormatPublicKey` or `FormatPrivateKey` to export the key of any RSA instance, in any format you want.
+
+```cs
+var rsa = RsaKeyGenerator.GetKey(RsaKeyFormat.Pem, RsaKeyPadding.Pkcs1, 2048).GetRSAInstance();
+rsa.FormatPublicKey(new RsaKeyFeature { IsPrivate = false; Format = RsaKeyFormat.Xml; Padding = RsaKeyPadding.Xml });
+rsa.FormatPrivateKey(new RsaKeyFeatire { IsPrivate = false; Format = RsaKeyFormat.Pem; Padding = RsaKeyPadding.Pkcs8 });
+rsa.FormatPrivateKey(new RsaKeyFeature { IsPrivate = true; Format = RsaKeyFormat.Der; Padding = RsaKeyPadding.Pkcs1 });
+```
 
 ### Encryption, decryption, signing, and signature verification
 
